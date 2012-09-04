@@ -10,13 +10,7 @@ namespace Flux.Model.Sprites {
 
     public abstract class Sprite {
 
-        /// <summary>
-        /// Gets or sets the ID.
-        /// </summary>
-        /// <value>
-        /// The ID.
-        /// </value>
-        public int ID { get; internal set; }
+
 
         /// <summary>
         /// Gets the flux game.
@@ -32,6 +26,13 @@ namespace Flux.Model.Sprites {
         protected Texture2D Texture { get; set; }
 
 
+        /// <summary>
+        /// Gets or sets the ID.
+        /// </summary>
+        /// <value>
+        /// The ID.
+        /// </value>
+        public int ID { get; internal set; }
 
         /// <summary>
         /// Gets or sets the position.
@@ -49,9 +50,6 @@ namespace Flux.Model.Sprites {
         /// </value>
         public Vector2 Size { get; set; }
 
-
-        private SpriteEffects _spriteEffect = SpriteEffects.None;
-
         /// <summary>
         /// Gets or sets the sprite effect.
         /// </summary>
@@ -59,9 +57,9 @@ namespace Flux.Model.Sprites {
         /// The sprite effect.
         /// </value>
         public SpriteEffects SpriteEffect { get { return _spriteEffect; } set { _spriteEffect = value; } }
+        private SpriteEffects _spriteEffect = SpriteEffects.None;
 
 
-        private float _rot;
 
         /// <summary>
         /// Gets or sets the rotation. Rotation goes from 0 - 359 degrees.
@@ -75,17 +73,16 @@ namespace Flux.Model.Sprites {
                 _rot = value % 360;
             }
         }
+        private float _rot;
 
-        private int _zindex = 1; //Keep for default sakes
         /// <summary>
         /// Gets or sets the index of the Z vert.
         /// </summary>
         /// <value>
         /// The index of the Z.
         /// </value>
-        public int ZIndex { get { return _zindex; } set { _zindex = value; } }
+        public int ZIndex { get; set; }
 
-        private float _zoomScale = 1f; //Default zoom scale
         /// <summary>
         /// Gets or sets the zoom scale.
         /// </summary>
@@ -93,6 +90,10 @@ namespace Flux.Model.Sprites {
         /// The zoom scale.
         /// </value>
         public float ZoomScale { get { return _zoomScale; } set { _zoomScale = value; } }
+        private float _zoomScale = 1f; //Default zoom scale
+
+
+
 
         /// <summary>
         /// Initializes a new empty instance of the <see cref="Sprite"/> class.
@@ -123,6 +124,9 @@ namespace Flux.Model.Sprites {
             this.Size = size;
             this.Position = position;
         }
+
+
+
         /// <summary>
         /// Draws this instance.
         /// </summary>
@@ -131,14 +135,7 @@ namespace Flux.Model.Sprites {
         }
 
 
-        /// <summary>
-        /// Invoked when a key is pressed
-        /// </summary>
-        /// <param name="key">The <see cref="Flux.Managers.KeyEventArgs"/> instance containing the event data.</param>
-        public virtual void KeyEvent ( KeyEventArgs key ) {
-        }
 
-        public virtual void MouseEvent () { }
         /// <summary>
         /// Updates this instance.
         /// </summary>

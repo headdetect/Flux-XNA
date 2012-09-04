@@ -108,7 +108,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Managers\KeyboardManager.cs" />
     <Compile Include="Managers\SpriteManager.cs" />
     <Compile Include="Managers\TextureManager.cs" />
     <Compile Include="Model\Sprites\BallSprite.cs" />

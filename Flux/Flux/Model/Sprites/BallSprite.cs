@@ -20,6 +20,10 @@ namespace Flux.Model.Sprites {
             : base( fluxGame, DEFAULT_SIZE, spawnPos ) { }
 
         internal override void Update ( GameTime gameTime ) {
+            if ( Keyboard.GetState().IsKeyDown( Keys.W ) ) {
+                this.Position -= new Vector2( 0, 3 );
+            }
+
             Rotation *= 2;
             Rotation++;
         }
@@ -33,19 +37,6 @@ namespace Flux.Model.Sprites {
             }
         }
 
-        public override void KeyEvent ( Managers.KeyEventArgs keyEvent ) {
-            base.KeyEvent( keyEvent );
-
-            for ( int i = 0; i < keyEvent.Keys.Length; i++ ) {
-                Keys key = keyEvent.Keys[ i ];
-
-                switch ( key ) {
-                    case Keys.W:
-                        Position -= new Vector2( 0, 3 );
-                        return;
-                }
-            }
-        }
     }
 
 }

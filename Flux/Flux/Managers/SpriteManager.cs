@@ -22,7 +22,6 @@ namespace Flux.Managers {
 
         static SpriteManager () {
             Sprites = new List<Sprite>( 255 );
-            KeyboardManager.KeyPressEvent += new EventHandler<KeyEventArgs>( KeyInvoked );
         }
 
         /// <summary>
@@ -65,17 +64,6 @@ namespace Flux.Managers {
             }
         }
 
-
-        /// <summary>
-        /// Invokes a key listener on all of the sprites
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The <see cref="Flux.Managers.KeyEventArgs"/> instance containing the event data.</param>
-        internal static void KeyInvoked ( object sender, KeyEventArgs eventArgs ) {
-            for ( int i = 0; i < Sprites.Count; i++ ) {
-                Sprites[ i ].KeyEvent( eventArgs );
-            }
-        }
 
     }
 }
