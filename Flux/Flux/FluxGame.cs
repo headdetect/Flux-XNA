@@ -11,24 +11,44 @@ using Microsoft.Xna.Framework.Media;
 using Flux.Model.Sprites;
 using Flux.Managers;
 using System.Reflection;
+using FarseerPhysics.Dynamics;
 
 namespace Flux {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class FluxGame : Microsoft.Xna.Framework.Game {
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        public Version Version {
+            get {
+                return Assembly.GetAssembly( typeof( FluxGame ) ).GetName().Version;
+            }
+        }
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
         public TextureManager TextureManager;
 
-        public Version Version {
-            get {
-                return Assembly.GetAssembly( typeof( FluxGame ) ).GetName().Version; 
-            }
-        }
+        //-- Game Entities --//
+
+        public Background Background;
+        public World PhysicsWorld;
+
+
+
         public FluxGame () {
             Graphics = new GraphicsDeviceManager( this );
             Content.RootDirectory = "Content";
+
+#if !DEBUG
+            Graphics.PreferredBackBufferHeight = 1080;
+            Graphics.PreferredBackBufferWidth = 1650;
+            Graphics.PreferMultiSampling = false;
+            Graphics.IsFullScreen = true;
+#endif
+
         }
 
         /// <summary>
@@ -45,6 +65,7 @@ namespace Flux {
             this.Window.Title = "Flux - v" + Version;
 #endif
 
+
             base.Initialize();
         }
 
@@ -56,6 +77,20 @@ namespace Flux {
             SpriteBatch = new SpriteBatch( GraphicsDevice );
 
             TextureManager = new Managers.TextureManager( this );
+
+            //Background = new Model.Sprites.Background( this );
+            // Background.ChangeBackground( "BackgroundGlow-1" );
+
+            PhysicsWorld = new World( Utils.EarthGravity );
+
+            /* Top Wall */
+            SpriteManager.Add( new WallSprite( this, new Rectangle( 0, 0, GraphicsDevice.Viewport.Width, 20 ) ) );
+            /* Left Wall */
+            SpriteManager.Add( new WallSprite( this, new Rectangle( 0, 0, 20, GraphicsDevice.Viewport.Height ) ) );
+            /* Right Wall */
+            SpriteManager.Add( new WallSprite( this, new Rectangle( GraphicsDevice.Viewport.Width - 20, 0, 20, GraphicsDevice.Viewport.Height ) ) );
+            /* Bottom Wall */
+            SpriteManager.Add( new WallSprite( this, new Rectangle( 0, GraphicsDevice.Viewport.Height - 20, GraphicsDevice.Viewport.Width, 20 ) ) );
 
             SpriteManager.Add( new BallSprite( this, new Vector2( GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2 ) ) );
         }
@@ -74,9 +109,9 @@ namespace Flux {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update ( GameTime gameTime ) {
-            if ( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.F12))
+            if ( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.F12 ) )
                 this.Exit();
-
+            PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
             SpriteManager.Update( gameTime );
 
             base.Update( gameTime );

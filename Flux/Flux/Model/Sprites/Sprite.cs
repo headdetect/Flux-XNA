@@ -5,11 +5,36 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Flux.Managers;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Collision.Shapes;
 
 namespace Flux.Model.Sprites {
 
     public abstract class Sprite {
 
+        /// <summary>
+        /// Gets or sets the body.
+        /// </summary>
+        /// <value>
+        /// The body.
+        /// </value>
+        public Body Body { get; set; }
+
+        /// <summary>
+        /// Gets or sets the fixture.
+        /// </summary>
+        /// <value>
+        /// The fixture.
+        /// </value>
+        public Fixture Fixture { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shape.
+        /// </summary>
+        /// <value>
+        /// The shape.
+        /// </value>
+        public Shape Shape { get; set; }
 
 
         /// <summary>
