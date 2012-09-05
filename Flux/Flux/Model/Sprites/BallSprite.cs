@@ -14,23 +14,24 @@ namespace Flux.Model.Sprites {
 
     public class BallSprite : PhysicsSprite {
 
-        readonly static Vector2 DEFAULT_SIZE = new Vector2( 50, 50 );
+        readonly static Vector2 DEFAULT_SIZE = new Vector2 ( 50, 50 );
 
         readonly Vector2 spawnPos;
 
 
 
         public BallSprite ( FluxGame fluxGame )
-            : base( fluxGame, DEFAULT_SIZE ) { }
+            : base ( fluxGame, DEFAULT_SIZE ) { }
 
         public BallSprite ( FluxGame fluxGame, Vector2 spawnPos )
-            : base( fluxGame, DEFAULT_SIZE, spawnPos ) {
+            : base ( fluxGame, DEFAULT_SIZE, spawnPos ) {
             this.spawnPos = spawnPos;
-            this.Body = BodyFactory.CreateCircle( Flux.PhysicsWorld, 50 / Utils.PixelsToMeterRatio, 1f, spawnPos / Utils.PixelsToMeterRatio );
-            this.Body.CreateFixture( new CircleShape( 50 / Utils.PixelsToMeterRatio, 1f ) );
+            this.Body = BodyFactory.CreateCircle ( Flux.PhysicsWorld, 50 / Utils.PixelsToMeterRatio, 1f, spawnPos / Utils.PixelsToMeterRatio );
+            this.Body.CreateFixture ( new CircleShape ( 50 / Utils.PixelsToMeterRatio, 2f ) );
             this.Body.FixtureList[ 0 ].Restitution = .3f;
             this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
-            this.Body.AngularDamping = 5f;
+            this.Body.AngularDamping = 9f;
+            this.Body.Friction = 20f;
 
         }
 
@@ -40,57 +41,71 @@ namespace Flux.Model.Sprites {
 
 
         public override void Update ( GameTime gameTime ) {
-            KeyboardState state = Keyboard.GetState();
+            KeyboardState state = Keyboard.GetState ();
 
-            if ( state.IsKeyDown( Keys.Enter ) ) {
-                this.Body.ResetDynamics();
+            if ( state.IsKeyDown ( Keys.Enter ) ) {
+                this.Body.ResetDynamics ();
                 this.Body.Position = spawnPos / 64;
                 this.spinIterations = 0;
                 this.Body.Rotation = 0;
-                base.Update( gameTime );
+                base.Update ( gameTime );
                 return;
             }
 
+            /* Boundry Checks */
             if ( this.Body.Position.X < -50 / 64f ) {
-                this.Body.SetTransform( spawnPos / 64, this.Body.Rotation );
+                this.Body.SetTransform ( spawnPos / 64, this.Body.Rotation );
             }
 
-            int speedModifier = state.IsKeyDown( Keys.LeftShift ) ? 3 : 1;
+            int speedModifier = state.IsKeyDown ( Keys.LeftShift ) ? 3 : 1;
 
-            if ( state.IsKeyDown( Keys.Space ) ) {
+            if ( state.IsKeyDown ( Keys.Space ) ) {
                 wasActivated = true;
                 spinIterations += .3f;
                 if ( spinIterations > 80 ) {
                     spinIterations = 80;
                 }
 
-            }
-            else {
-                spinIterations -= .5f;
-                if ( spinIterations < 0 ) {
+            } else {
+
+                //Slow down the rotations
+                if ( (int)spinIterations > 0 ) {
+                    spinIterations -= .4f;
+                } else if ( (int) spinIterations < 0 ) {
+                    spinIterations += .4f;
+                } else {
                     spinIterations = 0;
                 }
+
                 if ( wasActivated ) {
                     wasActivated = false;
 
 
 
 
-                    acceleration += spinIterations / 2;
+                    acceleration += spinIterations / 2; //To launch the ball
 
-                    this.Body.ApplyForce( new Vector2( 200 * spinIterations, 0 ), new Vector2( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                    this.Body.ApplyForce ( new Vector2 ( 200 * spinIterations, 0 ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
 
                     return;
                 }
             }
-           // this.Body.Rotation += spinIterations;
 
-            if ( state.IsKeyDown( Keys.A ) ) {
-                this.Body.ApplyForce( new Vector2( -40, 0f ), new Vector2( this.Body.Position.X, this.Body.Position.Y / 2 ) );
-            }
-            else if ( state.IsKeyDown( Keys.D ) ) {
-                this.Body.ApplyForce( new Vector2( 40, 0f ), new Vector2( this.Body.Position.X, this.Body.Position.Y / 2 ) );
-            }
+
+
+            if ( state.IsKeyDown ( Keys.A ) ) {
+                this.spinIterations -= 1f;
+                if ( this.spinIterations < -40f ) {
+                    this.spinIterations = -40f;
+                }
+                this.Body.ApplyForce ( new Vector2 ( -40, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+            } else if ( state.IsKeyDown ( Keys.D ) ) {
+                this.spinIterations += 1f;
+                if ( this.spinIterations > 40f ) {
+                    this.spinIterations = 40f;
+                }
+                this.Body.ApplyForce ( new Vector2 ( 40, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+            } 
 
 
             acceleration -= 2;
@@ -98,7 +113,10 @@ namespace Flux.Model.Sprites {
                 acceleration = 0;
             }
 
-            base.Update( gameTime );
+            this.Body.Rotation += spinIterations;
+
+            base.Update ( gameTime );
+
         }
 
         public override void Init () {
