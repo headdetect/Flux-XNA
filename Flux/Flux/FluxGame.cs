@@ -84,13 +84,13 @@ namespace Flux {
             PhysicsWorld = new World( Utils.EarthGravity );
 
             /* Top Wall */
-            SpriteManager.Add( new WallSprite( this, new Rectangle( 0, 0, GraphicsDevice.Viewport.Width, 20 ) ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2(10, 0), GraphicsDevice.Viewport.Width, 10 ) );
             /* Left Wall */
-            SpriteManager.Add( new WallSprite( this, new Rectangle( 0, 0, 20, GraphicsDevice.Viewport.Height ) ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2(0, 10), 10, GraphicsDevice.Viewport.Height ) );
             /* Right Wall */
-            SpriteManager.Add( new WallSprite( this, new Rectangle( GraphicsDevice.Viewport.Width - 20, 0, 20, GraphicsDevice.Viewport.Height ) ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2( GraphicsDevice.Viewport.Width - 10, 10 ), 10, GraphicsDevice.Viewport.Height ) );
             /* Bottom Wall */
-            SpriteManager.Add( new WallSprite( this, new Rectangle( 0, GraphicsDevice.Viewport.Height - 20, GraphicsDevice.Viewport.Width, 20 ) ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2( 0, GraphicsDevice.Viewport.Height - 10 ), GraphicsDevice.Viewport.Width, 10 ) );
 
             SpriteManager.Add( new BallSprite( this, new Vector2( GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2 ) ) );
         }

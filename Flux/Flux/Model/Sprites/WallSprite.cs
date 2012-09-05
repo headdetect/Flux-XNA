@@ -5,32 +5,37 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Flux.Managers;
 using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Flux.Model.Sprites {
-    public class WallSprite : Sprite {
+    public class WallSprite : PhysicsSprite {
 
-        public WallSprite ( FluxGame fluxGame, Rectangle rectangle ) : base (fluxGame) {
-            this.Position = new Vector2( rectangle.X, rectangle.Y );
-            this.Size = new Vector2( rectangle.Width, rectangle.Height );
+        public WallSprite ( FluxGame fluxGame, Vector2 position, int width, int height )
+            : base( fluxGame, new Vector2( width, height ), position ) {
 
-            this.Body = BodyFactory.CreateRectangle( Flux.PhysicsWorld, Size.X / Utils.PixelsToMeterRatio, Size.Y / Utils.PixelsToMeterRatio, 1f, Position / Utils.PixelsToMeterRatio );
-            this.Body.IsStatic = true;
-            this.Body.Restitution = .3f;
-            this.Body.Friction = .5f;
+            this.Body = BodyFactory.CreateRectangle( Flux.PhysicsWorld, Size.X / 64, Size.Y / 64, 1f, position / 64 );
+            // this.Body.Friction = 64f;
             this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Static;
         }
 
-        internal override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            this.Position = this.Body.Position * Utils.PixelsToMeterRatio;
-            this.Rotation = this.Body.Rotation;
+        public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
+            base.Update( gameTime );
         }
 
-        internal override void Init () {
-            this.Texture = Flux.TextureManager.WallTexture; 
+        public override void Init () {
+            //Texture = Flux.TextureManager.WallTexture;
+            Texture = new Texture2D( Flux.GraphicsDevice, (int)Size.X, (int)Size.Y, true, SurfaceFormat.Color );
+
+            Color[] colors = new Color[ (int)(Size.X * Size.Y) ];
+            for ( int i = 0; i < colors.Length; i++ ) {
+                colors[ i ] = Color.White;
+            }
+
+            Texture.SetData( colors );
         }
 
-        internal override void Destroy ( bool animation ) {
-            
+        public override void Destroy ( bool animation ) {
+
         }
     }
 }

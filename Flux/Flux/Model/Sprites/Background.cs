@@ -13,17 +13,17 @@ namespace Flux.Model.Sprites {
             SpriteManager.Add( this );
         }
 
-        internal override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
+        public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
             
         }
 
-        internal override void Init () {
+        public override void Init () {
             //this.ZIndex = -1;
             this.Position = Vector2.Zero;
             this.Size = new Vector2( Flux.GraphicsDevice.Viewport.Width, Flux.GraphicsDevice.Viewport.Height );
         }
 
-        internal override void Destroy ( bool animation ) {
+        public override void Destroy ( bool animation ) {
             
         }
 

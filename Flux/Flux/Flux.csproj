@@ -117,6 +117,7 @@
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Sprites\Background.cs" />
     <Compile Include="Model\Sprites\BallSprite.cs" />
+    <Compile Include="Model\Sprites\PhysicsSprite.cs" />
     <Compile Include="Model\Sprites\Sprite.cs" />
     <Compile Include="Model\Sprites\WallSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

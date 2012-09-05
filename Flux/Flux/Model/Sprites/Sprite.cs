@@ -12,29 +12,8 @@ namespace Flux.Model.Sprites {
 
     public abstract class Sprite {
 
-        /// <summary>
-        /// Gets or sets the body.
-        /// </summary>
-        /// <value>
-        /// The body.
-        /// </value>
-        public Body Body { get; set; }
 
-        /// <summary>
-        /// Gets or sets the fixture.
-        /// </summary>
-        /// <value>
-        /// The fixture.
-        /// </value>
-        public Fixture Fixture { get; set; }
 
-        /// <summary>
-        /// Gets or sets the shape.
-        /// </summary>
-        /// <value>
-        /// The shape.
-        /// </value>
-        public Shape Shape { get; set; }
 
 
         /// <summary>
@@ -155,7 +134,7 @@ namespace Flux.Model.Sprites {
         /// <summary>
         /// Draws this instance.
         /// </summary>
-        internal virtual void Draw ( GameTime gameTime ) {
+        public virtual void Draw ( GameTime gameTime ) {
             Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Size, ZoomScale, SpriteEffect, ZIndex );
         }
 
@@ -164,18 +143,18 @@ namespace Flux.Model.Sprites {
         /// <summary>
         /// Updates this instance.
         /// </summary>
-        internal abstract void Update ( GameTime gameTime );
+        public abstract void Update ( GameTime gameTime );
 
         /// <summary>
         /// Inits this instance.
         /// </summary>
-        internal abstract void Init ();
+        public abstract void Init ();
 
         /// <summary>
         /// Destroys the specified sprite.
         /// </summary>
         /// <param name="animation">if set to <c>true</c> animation SHOULD be shown.</param>
-        internal abstract void Destroy ( bool animation );
+        public abstract void Destroy ( bool animation );
 
     }
 
