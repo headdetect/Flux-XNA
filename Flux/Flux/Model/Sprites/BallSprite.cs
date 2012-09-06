@@ -35,8 +35,7 @@ namespace Flux.Model.Sprites {
 
         }
 
-        float spinIterations = 0,
-              acceleration = 0;
+        float spinIterations = 0;
         bool wasActivated = false;
 
 
@@ -80,12 +79,7 @@ namespace Flux.Model.Sprites {
                 if ( wasActivated ) {
                     wasActivated = false;
 
-
-
-
-                    acceleration += spinIterations / 2; //To launch the ball
-
-                    this.Body.ApplyForce ( new Vector2 ( 200 * spinIterations, 0 ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                    this.Body.ApplyForce ( new Vector2 ( 300 * spinIterations, 0 ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
 
                     return;
                 }
@@ -108,10 +102,6 @@ namespace Flux.Model.Sprites {
             } 
 
 
-            acceleration -= 2;
-            if ( acceleration < 0 ) {
-                acceleration = 0;
-            }
 
             this.Body.Rotation += spinIterations;
 
