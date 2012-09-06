@@ -30,9 +30,10 @@ namespace Flux.Model.Sprites {
             this.Body.CreateFixture ( new CircleShape ( 50 / Utils.PixelsToMeterRatio, 2f ) );
             this.Body.FixtureList[ 0 ].Restitution = .3f;
             this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
-            this.Body.AngularDamping = 9f;
+            this.Body.AngularDamping = 15f;
             this.Body.Friction = 20f;
 
+            FarseerPhysics.Settings.EnableDiagnostics = true;
         }
 
         float spinIterations = 0;
@@ -42,6 +43,17 @@ namespace Flux.Model.Sprites {
         public override void Update ( GameTime gameTime ) {
             KeyboardState state = Keyboard.GetState ();
 
+#if WINDOWS            
+            MouseState mState = Mouse.GetState ();
+            if ( mState.LeftButton == ButtonState.Pressed ) {
+                this.Body.ResetDynamics ();
+                this.Body.Position = new Vector2 ( mState.X, mState.Y ) / 64f ;
+                this.spinIterations = 0;
+                this.Body.Rotation = 0;
+                base.Update ( gameTime );
+                return;
+            }
+#endif
             if ( state.IsKeyDown ( Keys.Enter ) ) {
                 this.Body.ResetDynamics ();
                 this.Body.Position = spawnPos / 64;
@@ -49,11 +61,6 @@ namespace Flux.Model.Sprites {
                 this.Body.Rotation = 0;
                 base.Update ( gameTime );
                 return;
-            }
-
-            /* Boundry Checks */
-            if ( this.Body.Position.X < -50 / 64f ) {
-                this.Body.SetTransform ( spawnPos / 64, this.Body.Rotation );
             }
 
             int speedModifier = state.IsKeyDown ( Keys.LeftShift ) ? 3 : 1;
@@ -69,9 +76,9 @@ namespace Flux.Model.Sprites {
 
                 //Slow down the rotations
                 if ( (int)spinIterations > 0 ) {
-                    spinIterations -= .4f;
+                    spinIterations -= .9f;
                 } else if ( (int) spinIterations < 0 ) {
-                    spinIterations += .4f;
+                    spinIterations += .9f;
                 } else {
                     spinIterations = 0;
                 }

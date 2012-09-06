@@ -10,6 +10,5 @@ namespace Flux.Model {
         public Sprite PlayerSprite { get; set; }
 
 
-
     }
 }

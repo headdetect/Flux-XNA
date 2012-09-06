@@ -12,6 +12,7 @@ using Flux.Model.Sprites;
 using Flux.Managers;
 using System.Reflection;
 using FarseerPhysics.Dynamics;
+using Flux.Display;
 
 namespace Flux {
     /// <summary>
@@ -35,6 +36,7 @@ namespace Flux {
 
         public Background Background;
         public World PhysicsWorld;
+        public Camera Camera;
 
 
 
@@ -64,7 +66,7 @@ namespace Flux {
 #else
             this.Window.Title = "Flux - v" + Version;
 #endif
-
+            Camera = new Camera ( this );
 
             base.Initialize();
         }
@@ -84,13 +86,13 @@ namespace Flux {
             PhysicsWorld = new World( Utils.EarthGravity );
 
             /* Top Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2(10, 0), GraphicsDevice.Viewport.Width, 10 ) );
+            //SpriteManager.Add( new WallSprite( this, new Vector2(0, 0), GraphicsDevice.Viewport.Width, 10 ) );
             /* Left Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2(0, 10), 10, GraphicsDevice.Viewport.Height ) );
+            //SpriteManager.Add( new WallSprite( this, new Vector2(0, 0), 10, GraphicsDevice.Viewport.Height ) );
             /* Right Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( GraphicsDevice.Viewport.Width - 10, 10 ), 10, GraphicsDevice.Viewport.Height ) );
+           // SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 100, 0 ), 10, GraphicsDevice.Viewport.Height ) );
             /* Bottom Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( 0, GraphicsDevice.Viewport.Height - 10 ), GraphicsDevice.Viewport.Width, 10 ) );
+            SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 0, 100 ), GraphicsDevice.Viewport.Width, 10 ) );
 
             SpriteManager.Add( new BallSprite( this, new Vector2( GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2 ) ) );
         }
@@ -113,6 +115,7 @@ namespace Flux {
                 this.Exit();
             PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
             SpriteManager.Update( gameTime );
+            Camera.Update ();
 
             base.Update( gameTime );
         }
@@ -124,7 +127,7 @@ namespace Flux {
         protected override void Draw ( GameTime gameTime ) {
             GraphicsDevice.Clear( Color.Black );
 
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
 
             SpriteManager.Draw( gameTime );
 
