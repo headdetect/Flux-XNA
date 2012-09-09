@@ -42,22 +42,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BallTexture.png">
-      <Name>BallTexture</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Compile Include="Fonts\fpsfont.spritefont">
+      <Name>fpsfont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundGlow-1.png">
+    <Compile Include="Textures\BackgroundGlow-1.png">
       <Name>BackgroundGlow-1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="WallTexture.png">
+    <Compile Include="Textures\BallTexture.png">
+      <Name>BallTexture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\CursorTexture.png">
+      <Name>CursorTexture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\WallTexture.png">
       <Name>WallTexture</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

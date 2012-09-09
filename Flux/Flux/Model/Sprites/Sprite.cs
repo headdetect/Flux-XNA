@@ -55,6 +55,14 @@ namespace Flux.Model.Sprites {
         public Vector2 Size { get; set; }
 
         /// <summary>
+        /// Gets or sets the origin.
+        /// </summary>
+        /// <value>
+        /// The origin.
+        /// </value>
+        public Vector2 Origin { get; set; }
+
+        /// <summary>
         /// Gets or sets the sprite effect.
         /// </summary>
         /// <value>
@@ -115,6 +123,8 @@ namespace Flux.Model.Sprites {
         public Sprite ( FluxGame fluxGame, Vector2 size ) {
             this.Flux = fluxGame;
             this.Size = size;
+
+            this.Origin = new Vector2( size.X, size.Y ) / 2f;
         }
 
         /// <summary>
@@ -127,6 +137,8 @@ namespace Flux.Model.Sprites {
             this.Flux = fluxGame;
             this.Size = size;
             this.Position = position;
+
+            this.Origin = new Vector2( size.X, size.Y) / 2f;
         }
 
 
@@ -135,7 +147,7 @@ namespace Flux.Model.Sprites {
         /// Draws this instance.
         /// </summary>
         public virtual void Draw ( GameTime gameTime ) {
-            Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Size, ZoomScale, SpriteEffect, ZIndex );
+            Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
         }
 
 

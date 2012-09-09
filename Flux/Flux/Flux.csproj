@@ -97,6 +97,8 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
@@ -113,12 +115,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Display\Camera.cs" />
+    <Compile Include="Display\Cursor.cs" />
+    <Compile Include="Display\DebugForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Display\DebugForm.Designer.cs">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Display\FPSComponent.cs" />
+    <Compile Include="Display\HUD.cs" />
+    <Compile Include="Display\SpeedComponent.cs" />
+    <Compile Include="Managers\Settings.cs" />
     <Compile Include="Managers\SpriteManager.cs" />
-    <Compile Include="Managers\TextureManager.cs" />
+    <Compile Include="Managers\ContentManager.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Sprites\Background.cs" />
     <Compile Include="Model\Sprites\BallSprite.cs" />
     <Compile Include="Model\Sprites\PhysicsSprite.cs" />
+    <Compile Include="Model\Sprites\Shapes\EqualTriangle.cs" />
+    <Compile Include="Model\Sprites\Shapes\Shape.cs" />
     <Compile Include="Model\Sprites\Sprite.cs" />
     <Compile Include="Model\Sprites\WallSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,7 +179,11 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Display\DebugForm.resx">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

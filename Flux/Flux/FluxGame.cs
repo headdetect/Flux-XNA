@@ -13,6 +13,7 @@ using Flux.Managers;
 using System.Reflection;
 using FarseerPhysics.Dynamics;
 using Flux.Display;
+using Flux.Model;
 
 namespace Flux {
     /// <summary>
@@ -30,19 +31,26 @@ namespace Flux {
         }
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
-        public TextureManager TextureManager;
+        public Flux.Managers.ContentManager TextureManager;
 
         //-- Game Entities --//
 
         public Background Background;
         public World PhysicsWorld;
         public Camera Camera;
+        public HUD HUD;
+        public Player Player;
 
+#if DEBUG
+        public DebugForm DebugForm;
+#endif
 
 
         public FluxGame () {
             Graphics = new GraphicsDeviceManager( this );
             Content.RootDirectory = "Content";
+
+            this.IsFixedTimeStep = true;
 
 #if !DEBUG
             Graphics.PreferredBackBufferHeight = 1080;
@@ -62,11 +70,18 @@ namespace Flux {
         protected override void Initialize () {
 #if DEBUG
             this.Window.Title = "Flux (Debug Mode) - v" + Version;
-            this.IsMouseVisible = true;
+            this.IsMouseVisible = false;
 #else
             this.Window.Title = "Flux - v" + Version;
 #endif
-            Camera = new Camera ( this );
+
+
+            Camera = new Camera( this );
+            HUD = new HUD( this );
+            HUD.HUDObjects.Add( new FPSComponent( this ) );
+            HUD.HUDObjects.Add( new CursorComponent( this ) );
+
+            Components.Add( HUD );
 
             base.Initialize();
         }
@@ -78,7 +93,7 @@ namespace Flux {
         protected override void LoadContent () {
             SpriteBatch = new SpriteBatch( GraphicsDevice );
 
-            TextureManager = new Managers.TextureManager( this );
+            TextureManager = new Managers.ContentManager( this );
 
             //Background = new Model.Sprites.Background( this );
             // Background.ChangeBackground( "BackgroundGlow-1" );
@@ -90,11 +105,15 @@ namespace Flux {
             /* Left Wall */
             //SpriteManager.Add( new WallSprite( this, new Vector2(0, 0), 10, GraphicsDevice.Viewport.Height ) );
             /* Right Wall */
-           // SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 100, 0 ), 10, GraphicsDevice.Viewport.Height ) );
-            /* Bottom Wall */
-            SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 0, 100 ), GraphicsDevice.Viewport.Width, 10 ) );
+            // SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 100, 0 ), 10, GraphicsDevice.Viewport.Height ) );
 
-            SpriteManager.Add( new BallSprite( this, new Vector2( GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2 ) ) );
+
+            /* Bottom Wall */
+            SpriteManager.Add( new WallSprite( this, new Vector2( 0, 100 ), GraphicsDevice.Viewport.Width, 10 ) );
+
+
+
+            Player = new Player( this );
         }
 
         /// <summary>
@@ -113,9 +132,17 @@ namespace Flux {
         protected override void Update ( GameTime gameTime ) {
             if ( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.F12 ) )
                 this.Exit();
+
             PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
             SpriteManager.Update( gameTime );
-            Camera.Update ();
+            Camera.Update();
+#if DEBUG
+            if ( Keyboard.GetState().IsKeyDown( Keys.H ) ) {
+                if ( DebugForm == null )
+                    DebugForm = new Display.DebugForm( this );
+                DebugForm.Show();
+            }
+#endif
 
             base.Update( gameTime );
         }
@@ -127,7 +154,7 @@ namespace Flux {
         protected override void Draw ( GameTime gameTime ) {
             GraphicsDevice.Clear( Color.Black );
 
-            SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
+            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Camera.Transform );
 
             SpriteManager.Draw( gameTime );
 

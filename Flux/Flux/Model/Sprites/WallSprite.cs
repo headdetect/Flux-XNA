@@ -15,8 +15,6 @@ namespace Flux.Model.Sprites {
             : base ( fluxGame, new Vector2 ( width, height ), position ) {
 
             this.Body = BodyFactory.CreateRectangle ( Flux.PhysicsWorld, width / Utils.PixelsToMeterRatio, height / Utils.PixelsToMeterRatio, 1f, position / Utils.PixelsToMeterRatio );
-            //this.Body.AngularDamping = 15f;
-            //this.Body.Friction = 20f;
 
         }
 

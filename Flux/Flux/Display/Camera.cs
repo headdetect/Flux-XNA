@@ -8,7 +8,10 @@ using Microsoft.Xna.Framework.Input;
 namespace Flux.Display {
     public class Camera {
 
-        FluxGame flux { get; set; }
+        public FluxGame Game { get; set; }
+
+        public readonly int Width;
+        public readonly int Height;
 
         Vector2 position;
         float zoom;
@@ -19,7 +22,7 @@ namespace Flux.Display {
                 return Matrix.CreateTranslation ( new Vector3 ( -position.X, -position.Y, 0 ) ) *
                        Matrix.CreateRotationZ ( rotation ) *
                        Matrix.CreateScale ( new Vector3 ( zoom, zoom, 1 ) ) *
-                       Matrix.CreateTranslation ( new Vector3 ( flux.GraphicsDevice.Viewport.Width * .5f, flux.GraphicsDevice.Viewport.Height * .5f, 0 ) );
+                       Matrix.CreateTranslation ( new Vector3 ( Width * .5f, Height * .5f, 0 ) );
             }
         }
 
@@ -31,12 +34,14 @@ namespace Flux.Display {
 
 
         public Camera ( FluxGame game ) {
-            flux = game;
+            Game = game;
 
             position = new Vector2 ();
             zoom = 1f;
             rotation = 0f;
 
+            Width = game.GraphicsDevice.Viewport.Width;
+            Height = game.GraphicsDevice.Viewport.Height;
         }
 
         public void Move ( Vector2 plusAmount ) {

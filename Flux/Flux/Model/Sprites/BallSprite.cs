@@ -18,10 +18,10 @@ namespace Flux.Model.Sprites {
 
         readonly Vector2 spawnPos;
 
-
+        
 
         public BallSprite ( FluxGame fluxGame )
-            : base ( fluxGame, DEFAULT_SIZE ) { }
+            : this ( fluxGame, DEFAULT_SIZE ) { }
 
         public BallSprite ( FluxGame fluxGame, Vector2 spawnPos )
             : base ( fluxGame, DEFAULT_SIZE, spawnPos ) {
@@ -33,27 +33,30 @@ namespace Flux.Model.Sprites {
             this.Body.AngularDamping = 15f;
             this.Body.Friction = 20f;
 
-            FarseerPhysics.Settings.EnableDiagnostics = true;
+            this.Origin = Size;
         }
 
-        float spinIterations = 0;
+        public float spinIterations = 0;
         bool wasActivated = false;
 
 
         public override void Update ( GameTime gameTime ) {
             KeyboardState state = Keyboard.GetState ();
 
+
 #if WINDOWS            
             MouseState mState = Mouse.GetState ();
-            if ( mState.LeftButton == ButtonState.Pressed ) {
+            if ( mState.LeftButton == ButtonState.Pressed) {
                 this.Body.ResetDynamics ();
-                this.Body.Position = new Vector2 ( mState.X, mState.Y ) / 64f ;
+                this.Body.Position = new Vector2( mState.X, mState.Y ) / 64f;
                 this.spinIterations = 0;
                 this.Body.Rotation = 0;
                 base.Update ( gameTime );
                 return;
             }
 #endif
+
+
             if ( state.IsKeyDown ( Keys.Enter ) ) {
                 this.Body.ResetDynamics ();
                 this.Body.Position = spawnPos / 64;
@@ -95,17 +98,11 @@ namespace Flux.Model.Sprites {
 
 
             if ( state.IsKeyDown ( Keys.A ) ) {
-                this.spinIterations -= 1f;
-                if ( this.spinIterations < -40f ) {
-                    this.spinIterations = -40f;
-                }
-                this.Body.ApplyForce ( new Vector2 ( -40, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                this.spinIterations = -1.8f * speedModifier;
+                this.Body.ApplyForce ( new Vector2 ( -90f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
             } else if ( state.IsKeyDown ( Keys.D ) ) {
-                this.spinIterations += 1f;
-                if ( this.spinIterations > 40f ) {
-                    this.spinIterations = 40f;
-                }
-                this.Body.ApplyForce ( new Vector2 ( 40, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                this.spinIterations = 1.8f * speedModifier;
+                this.Body.ApplyForce ( new Vector2 ( 90f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
             } 
 
 
