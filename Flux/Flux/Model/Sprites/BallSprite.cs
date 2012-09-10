@@ -9,12 +9,13 @@ using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Audio;
+using Flux.Utils;
 
 namespace Flux.Model.Sprites {
 
     public class BallSprite : PhysicsSprite {
 
-        readonly static Vector2 DEFAULT_SIZE = new Vector2 ( 50, 50 );
+        readonly static Vector2 DEFAULT_SIZE = new Vector2 ( 25f );
 
         readonly Vector2 spawnPos;
 
@@ -26,14 +27,15 @@ namespace Flux.Model.Sprites {
         public BallSprite ( FluxGame fluxGame, Vector2 spawnPos )
             : base ( fluxGame, DEFAULT_SIZE, spawnPos ) {
             this.spawnPos = spawnPos;
-            this.Body = BodyFactory.CreateCircle ( Flux.PhysicsWorld, 50 / Utils.PixelsToMeterRatio, 1f, spawnPos / Utils.PixelsToMeterRatio );
-            this.Body.CreateFixture ( new CircleShape ( 50 / Utils.PixelsToMeterRatio, 2f ) );
+            this.Body = BodyFactory.CreateCircle( Flux.PhysicsWorld, Size.X / PhysicsUtils.PixelsToMeterRatio, 1f, spawnPos / PhysicsUtils.PixelsToMeterRatio );
+            this.Body.CreateFixture( new CircleShape( Size.X / PhysicsUtils.PixelsToMeterRatio, 2f ) );
             this.Body.FixtureList[ 0 ].Restitution = .3f;
             this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
-            this.Body.AngularDamping = 15f;
-            this.Body.Friction = 20f;
+            this.Body.AngularDamping = 25f;
+            this.Body.Friction = 25f;
 
             this.Origin = Size;
+            this.ZoomScale = Size.X / 25f;
         }
 
         public float spinIterations = 0;
@@ -48,7 +50,7 @@ namespace Flux.Model.Sprites {
             MouseState mState = Mouse.GetState ();
             if ( mState.LeftButton == ButtonState.Pressed) {
                 this.Body.ResetDynamics ();
-                this.Body.Position = new Vector2( mState.X, mState.Y ) / 64f;
+                this.Body.Position = (Flux.Camera.Position + new Vector2( mState.X, mState.Y )) / (64f * Flux.Camera.Zoom);
                 this.spinIterations = 0;
                 this.Body.Rotation = 0;
                 base.Update ( gameTime );
@@ -59,7 +61,7 @@ namespace Flux.Model.Sprites {
 
             if ( state.IsKeyDown ( Keys.Enter ) ) {
                 this.Body.ResetDynamics ();
-                this.Body.Position = spawnPos / 64;
+                this.Body.Position = spawnPos / 64f;
                 this.spinIterations = 0;
                 this.Body.Rotation = 0;
                 base.Update ( gameTime );
@@ -70,18 +72,18 @@ namespace Flux.Model.Sprites {
 
             if ( state.IsKeyDown ( Keys.Space ) ) {
                 wasActivated = true;
-                spinIterations += .3f;
-                if ( spinIterations > 80 ) {
-                    spinIterations = 80;
+                spinIterations += .6f;
+                if ( spinIterations > 100 ) {
+                    spinIterations = 100;
                 }
 
             } else {
 
                 //Slow down the rotations
                 if ( (int)spinIterations > 0 ) {
-                    spinIterations -= .9f;
+                    spinIterations -= 1.1f;
                 } else if ( (int) spinIterations < 0 ) {
-                    spinIterations += .9f;
+                    spinIterations += 1.1f;
                 } else {
                     spinIterations = 0;
                 }
@@ -89,7 +91,7 @@ namespace Flux.Model.Sprites {
                 if ( wasActivated ) {
                     wasActivated = false;
 
-                    this.Body.ApplyForce ( new Vector2 ( 300 * spinIterations, 0 ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                    this.Body.ApplyForce ( new Vector2 ( 150 * spinIterations, 0 ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
 
                     return;
                 }
@@ -98,11 +100,11 @@ namespace Flux.Model.Sprites {
 
 
             if ( state.IsKeyDown ( Keys.A ) ) {
-                this.spinIterations = -1.8f * speedModifier;
-                this.Body.ApplyForce ( new Vector2 ( -90f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                this.spinIterations = -3.5f * speedModifier;
+                this.Body.ApplyForce ( new Vector2 ( -20f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
             } else if ( state.IsKeyDown ( Keys.D ) ) {
-                this.spinIterations = 1.8f * speedModifier;
-                this.Body.ApplyForce ( new Vector2 ( 90f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
+                this.spinIterations = 3.5f * speedModifier;
+                this.Body.ApplyForce ( new Vector2 ( 20f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
             } 
 
 

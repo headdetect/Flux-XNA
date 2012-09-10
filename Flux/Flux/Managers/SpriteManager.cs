@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Flux.Model.Sprites;
 using Microsoft.Xna.Framework;
+using Flux.Utils;
 
 namespace Flux.Managers {
 

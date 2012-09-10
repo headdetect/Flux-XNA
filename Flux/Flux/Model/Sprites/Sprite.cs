@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Flux.Managers;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision.Shapes;
+using Flux.Utils;
 
 namespace Flux.Model.Sprites {
 
@@ -19,7 +20,7 @@ namespace Flux.Model.Sprites {
         /// <summary>
         /// Gets the flux game.
         /// </summary>
-        protected FluxGame Flux { get; private set; }
+        internal FluxGame Flux { get; private set; }
 
         /// <summary>
         /// Gets or sets the texture.
@@ -27,7 +28,7 @@ namespace Flux.Model.Sprites {
         /// <value>
         /// The texture.
         /// </value>
-        protected Texture2D Texture { get; set; }
+        public Texture2D Texture { get; set; }
 
 
         /// <summary>
@@ -167,6 +168,34 @@ namespace Flux.Model.Sprites {
         /// </summary>
         /// <param name="animation">if set to <c>true</c> animation SHOULD be shown.</param>
         public abstract void Destroy ( bool animation );
+
+        #region Utils
+
+        /// <summary>
+        /// Determines whether the points are in the bounds of the sprite
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns>
+        ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInBounds ( Vector2 point ) {
+            return IsInBounds( point.X, point.Y );
+        }
+
+        /// <summary>
+        /// Determines whether the points are in the bounds of the sprite.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns>
+        ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInBounds ( float x, float y ) {
+            Rectangle tangle = VectorUtils.VectorsToRectangle( Position, Size );
+            return tangle.Contains( (int) x, (int) y );
+        }
+
+        #endregion
 
     }
 

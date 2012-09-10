@@ -26,6 +26,14 @@ namespace Flux.Display {
         public List<IHUDComponent> HUDObjects { get; set; }
 
         /// <summary>
+        /// Gets or sets the cursor.
+        /// </summary>
+        /// <value>
+        /// The cursor.
+        /// </value>
+        public CursorComponent Cursor { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HUD"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -35,13 +43,24 @@ namespace Flux.Display {
 
             Height = game.GraphicsDevice.Viewport.Height;
             Width = game.GraphicsDevice.Viewport.Width;
+
+            Cursor = new CursorComponent( game );
         }
 
+        public override void Initialize () {
+            for ( int i = 0; i < HUDObjects.Count; i++ ) {
+                HUDObjects[ i ].Init();
+            }
+            base.Initialize();
+        }
         public override void Update ( GameTime gameTime ) {
 
             for ( int i = 0; i < HUDObjects.Count; i++ ) {
                 HUDObjects[ i ].Update( gameTime );
             }
+
+            /* Cursor always goes on top */
+            Cursor.Update( gameTime );
 
             base.Update( gameTime );
         }
@@ -52,7 +71,10 @@ namespace Flux.Display {
                 HUDObjects[ i ].Draw( gameTime );
             }
 
-            base.Update( gameTime );
+            /* Cursor always goes on top */
+            Cursor.Draw( gameTime );
+
+            base.Draw( gameTime );
         }
 
     }
@@ -62,10 +84,17 @@ namespace Flux.Display {
     /// </summary>
     public interface IHUDComponent {
 
+
+        /// <summary>
+        /// Inits this instance.
+        /// </summary>
+        void Init ();
+
         /// <summary>
         /// Updates this instance.
         /// </summary>
         void Update ( GameTime gameTime );
+
 
         /// <summary>
         /// Draws this instance.

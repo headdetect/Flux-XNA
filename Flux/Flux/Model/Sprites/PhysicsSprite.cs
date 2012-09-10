@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using Flux.Utils;
 
 namespace Flux.Model.Sprites {
     public abstract class PhysicsSprite : Sprite {
@@ -42,7 +43,7 @@ namespace Flux.Model.Sprites {
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update ( GameTime gameTime ) {
-            this.Position = Body.Position * Utils.PixelsToMeterRatio;
+            this.Position = Body.Position * PhysicsUtils.PixelsToMeterRatio;
             this.Rotation = Body.Rotation;
         }
         

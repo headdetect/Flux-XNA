@@ -14,6 +14,7 @@ using System.Reflection;
 using FarseerPhysics.Dynamics;
 using Flux.Display;
 using Flux.Model;
+using Flux.Utils;
 
 namespace Flux {
     /// <summary>
@@ -40,6 +41,7 @@ namespace Flux {
         public Camera Camera;
         public HUD HUD;
         public Player Player;
+        public ToolBox ToolBox;
 
 #if DEBUG
         public DebugForm DebugForm;
@@ -51,6 +53,7 @@ namespace Flux {
             Content.RootDirectory = "Content";
 
             this.IsFixedTimeStep = true;
+            FarseerPhysics.Settings.MaxPolygonVertices = 11;
 
 #if !DEBUG
             Graphics.PreferredBackBufferHeight = 1080;
@@ -79,10 +82,8 @@ namespace Flux {
             Camera = new Camera( this );
             HUD = new HUD( this );
             HUD.HUDObjects.Add( new FPSComponent( this ) );
-            HUD.HUDObjects.Add( new CursorComponent( this ) );
 
             Components.Add( HUD );
-
             base.Initialize();
         }
 
@@ -95,25 +96,30 @@ namespace Flux {
 
             TextureManager = new Managers.ContentManager( this );
 
-            //Background = new Model.Sprites.Background( this );
-            // Background.ChangeBackground( "BackgroundGlow-1" );
+            Background = new Model.Sprites.Background( this );
+            Background.ChangeBackground( "BackgroundTextureOne" );
 
-            PhysicsWorld = new World( Utils.EarthGravity );
+            PhysicsWorld = new World( PhysicsUtils.EarthGravity );
 
             /* Top Wall */
-            //SpriteManager.Add( new WallSprite( this, new Vector2(0, 0), GraphicsDevice.Viewport.Width, 10 ) );
-            /* Left Wall */
-            //SpriteManager.Add( new WallSprite( this, new Vector2(0, 0), 10, GraphicsDevice.Viewport.Height ) );
-            /* Right Wall */
-            // SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 100, 0 ), 10, GraphicsDevice.Viewport.Height ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2( 0, -HUD.Height / 2 ), HUD.Width, 30 ) );
 
+            /* Left Wall */
+            SpriteManager.Add( new WallSprite( this, new Vector2( -HUD.Width / 2,  0), 30, HUD.Height ) );
+
+            /* Right Wall */
+            SpriteManager.Add( new WallSprite( this, new Vector2( HUD.Width / 2 - 15, 0 ), 30, HUD.Height ) );
 
             /* Bottom Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( 0, 100 ), GraphicsDevice.Viewport.Width, 10 ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2( 0, HUD.Height / 2 - 15 ), HUD.Width, 30 ) );
 
 
-
+            ToolBox = new Display.ToolBox( this );
+            HUD.HUDObjects.Add( ToolBox );
             Player = new Player( this );
+           // Camera.SpriteToFollow = Player.Sprite;
+
+            HUD.Initialize();
         }
 
         /// <summary>
@@ -154,7 +160,7 @@ namespace Flux {
         protected override void Draw ( GameTime gameTime ) {
             GraphicsDevice.Clear( Color.Black );
 
-            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Camera.Transform );
+            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, null, null, null, Camera.Transform );
 
             SpriteManager.Draw( gameTime );
 

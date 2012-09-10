@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Flux.Model.Sprites;
 
 namespace Flux.Display {
     public class CursorComponent : IHUDComponent  {
@@ -22,6 +23,7 @@ namespace Flux.Display {
             MouseState state = Mouse.GetState();
             this.X = state.X;
             this.Y = state.Y;
+
         }
 
         public void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
@@ -30,6 +32,9 @@ namespace Flux.Display {
             _game.SpriteBatch.Draw( _game.TextureManager.CursorTexture, new Vector2( X, Y ), Color.White );
 
             _game.SpriteBatch.End();
+        }
+
+        public void Init () {
         }
     }
 }

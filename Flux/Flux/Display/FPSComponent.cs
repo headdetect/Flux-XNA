@@ -56,5 +56,8 @@ namespace Flux.Display {
             _game.SpriteBatch.End();
         }
 
+
+        public void Init () {
+        }
     }
 }
