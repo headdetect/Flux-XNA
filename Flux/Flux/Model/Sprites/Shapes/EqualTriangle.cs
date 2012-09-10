@@ -32,7 +32,7 @@ namespace Flux.Model.Sprites.Shapes {
 
             //Body = BodyFactory.CreatePolygon( Flux.PhysicsWorld, textureVertices, 1f, BodyType.Static );
 
-            Body = BodyFactory.CreatePolygon(Flux.PhysicsWorld, new Vertices(PhysicsUtils.CreatePolygon( 3, Texture.Width / 64f ) ), 1f);
+            //Body = BodyFactory.CreatePolygon(Flux.PhysicsWorld, new Vertices(PhysicsUtils.CreatePolygon( 3, Texture.Width / 64f ) ), 1f);
         }
 
         public override void Destroy ( bool animate ) {
@@ -49,6 +49,10 @@ namespace Flux.Model.Sprites.Shapes {
 
         public override Microsoft.Xna.Framework.Graphics.Texture2D TextureHovered {
             get { return Flux.TextureManager.TriangleTexture_Hover; }
+        }
+
+        public override void Update ( GameTime gameTime ) {
+            
         }
     }
 }

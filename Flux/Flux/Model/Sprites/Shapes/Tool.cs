@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Flux.Model.Sprites.Shapes {
-    public abstract class Tool : PhysicsSprite {
+    public abstract class Tool : Sprite {
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool"/> class.

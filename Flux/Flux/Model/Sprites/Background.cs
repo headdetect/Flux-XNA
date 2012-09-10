@@ -11,10 +11,6 @@ namespace Flux.Model.Sprites {
 
         internal Background ( FluxGame gaem )
             : base( gaem ) {
-
-            SpriteManager.Sprites.Insert( 0, this );
-            ID = SpriteManager.Sprites.Count;
-            Init();
             Origin = Size / 2f;
         }
 
@@ -23,12 +19,12 @@ namespace Flux.Model.Sprites {
         }
 
         public override void Init () {
-            this.ZIndex = 0;
+           // this.ZIndex = 0;
             this.Size = new Vector2( Flux.GraphicsDevice.Viewport.Width, Flux.GraphicsDevice.Viewport.Height );
         }
 
         public override void Draw ( GameTime gameTime ) {
-            Flux.SpriteBatch.Draw( Texture, Position, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
+            Flux.SpriteBatch.Draw( Texture, Position, new Rectangle(0, 0, (int)Size.X * 2, (int)Size.Y * 2), Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
         }
 
 

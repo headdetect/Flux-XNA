@@ -33,6 +33,7 @@ namespace Flux {
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
         public Flux.Managers.ContentManager TextureManager;
+        public SpriteManager SpriteManager;
 
         //-- Game Entities --//
 
@@ -94,10 +95,13 @@ namespace Flux {
         protected override void LoadContent () {
             SpriteBatch = new SpriteBatch( GraphicsDevice );
 
-            TextureManager = new Managers.ContentManager( this );
-
             Background = new Model.Sprites.Background( this );
             Background.ChangeBackground( "BackgroundTextureOne" );
+
+            TextureManager = new Managers.ContentManager( this );
+            SpriteManager = new SpriteManager( this );
+
+
 
             PhysicsWorld = new World( PhysicsUtils.EarthGravity );
 

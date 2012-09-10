@@ -13,23 +13,26 @@ namespace Flux.Managers {
     /// </summary>
     public class SpriteManager {
 
+        public Sprite BackgroundSprite;
+
         /// <summary>
         /// Gets or sets the sprites.
         /// </summary>
         /// <value>
         /// The sprites.
         /// </value>
-        public static List<Sprite> Sprites { get; set; }
+        public List<Sprite> Sprites { get; set; }
 
-        static SpriteManager () {
+        public SpriteManager (FluxGame game) {
             Sprites = new List<Sprite>( 255 );
+            BackgroundSprite = game.Background;
         }
 
         /// <summary>
         /// Adds the specified sprite.
         /// </summary>
         /// <param name="sprite">The sprite.</param>
-        public static void Add ( Sprite sprite ) {
+        public void Add ( Sprite sprite ) {
             Sprites.Add( sprite );
             sprite.ID = Sprites.Count;
             sprite.Init();
@@ -40,7 +43,7 @@ namespace Flux.Managers {
         /// </summary>
         /// <param name="sprite">The sprite.</param>
         /// <param name="animation">if set to <c>true</c> [animation].</param>
-        public static void Remove ( Sprite sprite, bool animation = true ) {
+        public void Remove ( Sprite sprite, bool animation = true ) {
             sprite.Destroy( animation );
             Sprites.Remove( sprite );
         }
@@ -49,7 +52,9 @@ namespace Flux.Managers {
         /// Updates all sprites with a specified game time.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        internal static void Update ( GameTime gameTime ) {
+        internal void Update ( GameTime gameTime ) {
+            BackgroundSprite.Update( gameTime );
+
             for ( int i = 0; i < Sprites.Count; i++ ) {
                 Sprites[ i ].Update( gameTime );
             }
@@ -59,7 +64,9 @@ namespace Flux.Managers {
         /// Draws all sprites with the specified game time.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        internal static void Draw ( GameTime gameTime ) {
+        internal void Draw ( GameTime gameTime ) {
+            BackgroundSprite.Draw( gameTime );
+
             for ( int i = 0; i < Sprites.Count; i++ ) {
                 Sprites[ i ].Draw( gameTime );
             }

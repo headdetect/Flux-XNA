@@ -29,8 +29,8 @@ namespace Flux.Display {
             this.game = game;
 
             for ( int i = 0; i < 6; i++ ) {
-                Slots[ i ] = new Slot( new EqualTriangle( game ) );
-                
+                Slots[ i ] = new Slot( new EqualTriangle( game ), 4 );
+
             }
         }
 
@@ -41,7 +41,7 @@ namespace Flux.Display {
 
         public void Init () {
             for ( int i = 0; i < 6; i++ ) {
-                Slots[i].Tool.Init();
+                Slots[ i ].Tool.Init();
             }
         }
 
@@ -58,7 +58,7 @@ namespace Flux.Display {
             }
             if ( state.LeftButton == ButtonState.Pressed ) {
                 if ( SelectedTool != null ) {
-                    SpriteManager.Add( SelectedTool );
+                    game.SpriteManager.Add( SelectedTool );
                     SelectedTool = null;
                 }
             }
@@ -76,7 +76,7 @@ namespace Flux.Display {
             var pos = new Vector2( screen.X / 2, screen.Y - Size.Y / 2 );
             var startPos = new Vector2( PAD + PAD, height / 2 );
 
-            
+
             game.SpriteBatch.Begin();
 
             game.SpriteBatch.Draw( game.TextureManager.ToolBoxTexture, pos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
@@ -84,12 +84,12 @@ namespace Flux.Display {
 
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
-                game.SpriteBatch.Draw( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture,  pos + startPos + new Vector2( i * ( PAD + width + PAD ), 0 ), null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
+                game.SpriteBatch.Draw( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, pos + startPos + new Vector2( i * ( PAD + width + PAD ), 0 ), null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
-                if ( slot.Count > 1 ) {
-                    game.SpriteBatch.DrawString( game.TextureManager.ToolBoxFont, slot.Count.ToString(), pos + startPos + new Vector2( i * ( PAD + width + PAD ), height ), Color.White );
-                }
-            
+                if ( slot.Count > 1 )
+                    game.SpriteBatch.DrawString( game.TextureManager.ToolBoxFont, slot.Count.ToString(), startPos + new Vector2( pos.X / 2 + width - PAD, pos.Y ) + new Vector2( i * ( PAD + width + PAD ), -height - 10 ), Color.White );
+
+
             }
 
             game.SpriteBatch.End();
@@ -101,9 +101,9 @@ namespace Flux.Display {
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
 
-                slot.IsHoveredOver = slot.Tool.IsInBounds( slot.Tool.Position + Vector2.One);
-                    
-                
+                slot.IsHoveredOver = slot.Tool.IsInBounds( slot.Tool.Position + Vector2.One );
+
+
             }
 
             //return stuff
@@ -123,9 +123,11 @@ namespace Flux.Display {
         public bool IsHoveredOver { get; set; }
 
         public Slot () {
+            Count = -1;
         }
 
         public Slot ( Tool tool ) {
+            Count = 1;
             Tool = tool;
         }
 

@@ -25,7 +25,7 @@ namespace Flux.Model {
 
             Sprite = new BallSprite( game, new Vector2( game.GraphicsDevice.Viewport.Bounds.Width / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 ) );
             game.HUD.HUDObjects.Add( new SpeedComponent( game ) );
-            SpriteManager.Add(Sprite);
+            game.SpriteManager.Add(Sprite);
         }
     }
 }
