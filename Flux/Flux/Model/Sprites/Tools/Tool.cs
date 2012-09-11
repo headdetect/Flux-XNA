@@ -42,5 +42,7 @@ namespace Flux.Model.Sprites.Shapes {
         /// </summary>
         public abstract Texture2D TextureHovered { get; }
 
+        public abstract Type BlockForm { get; }
+
     }
 }

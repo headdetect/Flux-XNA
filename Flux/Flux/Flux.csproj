@@ -132,9 +132,10 @@
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Sprites\Background.cs" />
     <Compile Include="Model\Sprites\BallSprite.cs" />
+    <Compile Include="Model\Sprites\Blocks\EqualTriangleBlock.cs" />
     <Compile Include="Model\Sprites\PhysicsSprite.cs" />
-    <Compile Include="Model\Sprites\Shapes\EqualTriangle.cs" />
-    <Compile Include="Model\Sprites\Shapes\Tool.cs" />
+    <Compile Include="Model\Sprites\Tools\EqualTriangleTool.cs" />
+    <Compile Include="Model\Sprites\Tools\Tool.cs" />
     <Compile Include="Model\Sprites\Sprite.cs" />
     <Compile Include="Model\Sprites\WallSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -187,6 +188,7 @@
       <DependentUpon>DebugForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

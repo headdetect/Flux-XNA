@@ -26,6 +26,7 @@ namespace Flux.Managers {
         public SpriteManager (FluxGame game) {
             Sprites = new List<Sprite>( 255 );
             BackgroundSprite = game.Background;
+            BackgroundSprite.Init ();
         }
 
         /// <summary>

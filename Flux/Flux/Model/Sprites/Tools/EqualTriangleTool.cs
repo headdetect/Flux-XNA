@@ -8,31 +8,18 @@ using Microsoft.Xna.Framework;
 using Flux.Utils;
 using FarseerPhysics.Common.PolygonManipulation;
 using FarseerPhysics.Dynamics;
+using Flux.Model.Sprites.Blocks;
 
 namespace Flux.Model.Sprites.Shapes {
-    public class EqualTriangle : Tool {
+    public class EqualTriangleTool : Tool {
 
 
-        public EqualTriangle ( FluxGame game ) : base(game) {
+        public EqualTriangleTool ( FluxGame game ) : base(game) {
         }
 
         public override void Init () {
             Texture = Flux.TextureManager.TriangleTexture;
-            uint[] data = new uint[ Texture.Width * Texture.Height ];
-            Texture.GetData<uint>( data );
-
-            Vertices textureVertices = PolygonTools.CreatePolygon( data, Texture.Width, false );
-
-            Vector2 centroid = -textureVertices.GetCentroid();
-            textureVertices.Translate( ref centroid );
-
-            Origin = -centroid;
-
-            textureVertices = SimplifyTools.ReduceByDistance( textureVertices, Texture.Height );
-
-            //Body = BodyFactory.CreatePolygon( Flux.PhysicsWorld, textureVertices, 1f, BodyType.Static );
-
-            //Body = BodyFactory.CreatePolygon(Flux.PhysicsWorld, new Vertices(PhysicsUtils.CreatePolygon( 3, Texture.Width / 64f ) ), 1f);
+            Size = new Vector2 ( (float) Texture.Width, (float) Texture.Height );
         }
 
         public override void Destroy ( bool animate ) {
@@ -53,6 +40,12 @@ namespace Flux.Model.Sprites.Shapes {
 
         public override void Update ( GameTime gameTime ) {
             
+        }
+
+        public override Type BlockForm {
+            get {
+                return typeof ( EqualTriangleBlock );
+            }
         }
     }
 }

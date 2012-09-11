@@ -11,7 +11,7 @@ using Flux.Utils;
 namespace Flux.Display {
     public class ToolBox : IHUDComponent {
 
-        readonly Vector2 Size = new Vector2( 400, 70 );
+        readonly Vector2 Size = new Vector2 ( 400, 70 );
 
         FluxGame game;
 
@@ -19,7 +19,10 @@ namespace Flux.Display {
 
         public Tool SelectedTool { get; set; }
 
-        public Slot[] Slots = new Slot[ 6 ];
+        public readonly Slot[] Slots = new Slot[ 6 ];
+
+        private readonly Vector2 screenSize;
+        private readonly Vector2 toolPos;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolBox"/> class.
@@ -28,10 +31,10 @@ namespace Flux.Display {
         public ToolBox ( FluxGame game ) {
             this.game = game;
 
-            for ( int i = 0; i < 6; i++ ) {
-                Slots[ i ] = new Slot( new EqualTriangle( game ), 4 );
+            screenSize = new Vector2 ( game.HUD.Width, game.HUD.Height );
+            toolPos = new Vector2 ( screenSize.X / 2, screenSize.Y - Size.Y / 2 );
 
-            }
+
         }
 
         public ToolBox ( FluxGame game, Slot[] slots ) {
@@ -41,14 +44,21 @@ namespace Flux.Display {
 
         public void Init () {
             for ( int i = 0; i < 6; i++ ) {
-                Slots[ i ].Tool.Init();
+                Slots[ i ] = new Slot ( new EqualTriangleTool ( game ), 4 );
+                Slots[ i ].Tool.Init ();
+
+                float height = Slots[ i ].Tool.Size.Y;
+                float width = Slots[ i ].Tool.Size.X;
+
+                Slots[ i ].Tool.Position = toolPos - new Vector2( width * 4 + PAD + PAD / 2, 10) +  new Vector2 ( i * ( PAD + width + PAD ), 0 );
+
             }
         }
 
         public void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            MouseState state = Mouse.GetState();
+            MouseState state = Mouse.GetState ();
 
-            Tool tool = GetTool( state );
+            Tool tool = GetTool ( state );
 
             if ( tool != null ) {
 
@@ -58,7 +68,7 @@ namespace Flux.Display {
             }
             if ( state.LeftButton == ButtonState.Pressed ) {
                 if ( SelectedTool != null ) {
-                    game.SpriteManager.Add( SelectedTool );
+                    game.SpriteManager.Add ( SelectedTool );
                     SelectedTool = null;
                 }
             }
@@ -69,30 +79,22 @@ namespace Flux.Display {
         const int PAD = 11;
 
         public void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            int width = game.TextureManager.TriangleTexture.Width;
-            int height = game.TextureManager.TriangleTexture.Height;
+            game.SpriteBatch.Begin ();
 
-            var screen = new Vector2( game.HUD.Width, game.HUD.Height );
-            var pos = new Vector2( screen.X / 2, screen.Y - Size.Y / 2 );
-            var startPos = new Vector2( PAD + PAD, height / 2 );
-
-
-            game.SpriteBatch.Begin();
-
-            game.SpriteBatch.Draw( game.TextureManager.ToolBoxTexture, pos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
+            game.SpriteBatch.Draw ( game.TextureManager.ToolBoxTexture, toolPos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
 
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
-                game.SpriteBatch.Draw( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, pos + startPos + new Vector2( i * ( PAD + width + PAD ), 0 ), null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
+                game.SpriteBatch.Draw ( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, slot.Tool.Position, null, Color.White, 0f, Vector2.Zero, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
                 if ( slot.Count > 1 )
-                    game.SpriteBatch.DrawString( game.TextureManager.ToolBoxFont, slot.Count.ToString(), startPos + new Vector2( pos.X / 2 + width - PAD, pos.Y ) + new Vector2( i * ( PAD + width + PAD ), -height - 10 ), Color.White );
+                    game.SpriteBatch.DrawString ( game.TextureManager.ToolBoxFont, slot.Count.ToString (), slot.Tool.Position - new Vector2 ( 0, 10 ), Color.White );
 
 
             }
 
-            game.SpriteBatch.End();
+            game.SpriteBatch.End ();
         }
 
         Tool GetTool ( MouseState state ) {
@@ -101,7 +103,7 @@ namespace Flux.Display {
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
 
-                slot.IsHoveredOver = slot.Tool.IsInBounds( slot.Tool.Position + Vector2.One );
+                slot.IsHoveredOver = slot.Tool.IsInBounds ( state.X, state.Y );
 
 
             }

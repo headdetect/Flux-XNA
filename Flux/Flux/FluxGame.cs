@@ -144,8 +144,9 @@ namespace Flux {
                 this.Exit();
 
             PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
-            SpriteManager.Update( gameTime );
             Camera.Update();
+            SpriteManager.Update( gameTime );
+            
 #if DEBUG
             if ( Keyboard.GetState().IsKeyDown( Keys.H ) ) {
                 if ( DebugForm == null )
@@ -156,6 +157,7 @@ namespace Flux {
 
             base.Update( gameTime );
         }
+        
 
         /// <summary>
         /// This is called when the game should draw itself.

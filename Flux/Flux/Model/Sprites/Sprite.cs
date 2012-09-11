@@ -125,7 +125,7 @@ namespace Flux.Model.Sprites {
             this.Flux = fluxGame;
             this.Size = size;
 
-            this.Origin = new Vector2( size.X, size.Y ) / 2f;
+            this.Origin = new Vector2 ( size.X, size.Y ) / 2f;
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Flux.Model.Sprites {
             this.Size = size;
             this.Position = position;
 
-            this.Origin = new Vector2( size.X, size.Y) / 2f;
+            this.Origin = new Vector2 ( size.X, size.Y ) / 2f;
         }
 
 
@@ -148,7 +148,7 @@ namespace Flux.Model.Sprites {
         /// Draws this instance.
         /// </summary>
         public virtual void Draw ( GameTime gameTime ) {
-            Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
+            Flux.SpriteBatch.Draw ( Texture, Position, null, Color.White, Convert.ToSingle ( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex  );
         }
 
 
@@ -179,7 +179,7 @@ namespace Flux.Model.Sprites {
         ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
         /// </returns>
         public bool IsInBounds ( Vector2 point ) {
-            return IsInBounds( point.X, point.Y );
+            return IsInBounds ( point.X, point.Y );
         }
 
         /// <summary>
@@ -191,8 +191,12 @@ namespace Flux.Model.Sprites {
         ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
         /// </returns>
         public bool IsInBounds ( float x, float y ) {
-            Rectangle tangle = VectorUtils.VectorsToRectangle( Position, Size );
-            return tangle.Contains( (int) x, (int) y );
+            Rectangle tangle = VectorUtils.VectorsToRectangle ( Position, Size );
+
+            if ( tangle.IsEmpty )
+                return false;
+
+            return tangle.Contains ( (int) x, (int) y );
         }
 
         #endregion

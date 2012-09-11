@@ -10,21 +10,23 @@ namespace Flux.Model.Sprites {
     public class Background : Sprite {
 
         internal Background ( FluxGame gaem )
-            : base( gaem ) {
-            Origin = Size / 2f;
+            : base ( gaem ) {
+
+            
         }
 
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            this.Position = Flux.Camera.Position - Origin / 2 + new Vector2( 10 );
+
+            this.Position = Flux.Camera.Position - Origin; 
         }
 
         public override void Init () {
-           // this.ZIndex = 0;
-            this.Size = new Vector2( Flux.GraphicsDevice.Viewport.Width, Flux.GraphicsDevice.Viewport.Height );
+            this.Size = new Vector2 ( Flux.GraphicsDevice.Viewport.Width, Flux.GraphicsDevice.Viewport.Height );
+            this.Origin = Size / 2;
         }
 
         public override void Draw ( GameTime gameTime ) {
-            Flux.SpriteBatch.Draw( Texture, Position, new Rectangle(0, 0, (int)Size.X * 2, (int)Size.Y * 2), Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
+            Flux.SpriteBatch.Draw ( Texture, Position, new Rectangle ( 0, 0, (int) Size.X * 2, (int) Size.Y * 2 ), Color.White, Flux.Camera.Rotation, Origin, ZoomScale, SpriteEffects.None, 1f );
         }
 
 
@@ -33,7 +35,7 @@ namespace Flux.Model.Sprites {
         }
 
         public void ChangeBackground ( string contentName, string theme = "Wood" ) {
-            Texture = Flux.Content.Load<Texture2D>( theme + "/Textures/" + contentName );
+            Texture = Flux.Content.Load<Texture2D> ( theme + "/Textures/" + contentName );
         }
     }
 }
