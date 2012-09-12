@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 using Flux.Utils;
+using Microsoft.Xna.Framework.Input;
 
 namespace Flux.Model.Sprites.Blocks {
     public class EqualTriangleBlock : Block {
@@ -19,6 +20,7 @@ namespace Flux.Model.Sprites.Blocks {
         /// <param name="position">The position.</param>
         public EqualTriangleBlock ( FluxGame game, Vector2 size, Vector2 position ) : base( game, size, position ) {
             Body = BodyFactory.CreatePolygon( game.PhysicsWorld, PhysicsUtils.CreatePolygon( 3, size.Y ), 1f );
+            Body.BodyType = FarseerPhysics.Dynamics.BodyType.Static;
         }
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace Flux.Model.Sprites.Blocks {
         /// <param name="size">The size.</param>
         public EqualTriangleBlock ( FluxGame game, Vector2 size ) : base( game, size ) {
             Body = BodyFactory.CreatePolygon( game.PhysicsWorld, PhysicsUtils.CreatePolygon( 3, size.Y ), 1f );
+            Body.BodyType = FarseerPhysics.Dynamics.BodyType.Static;
         }
 
         /// <summary>
@@ -37,8 +40,8 @@ namespace Flux.Model.Sprites.Blocks {
         public EqualTriangleBlock ( FluxGame game ) : base( game ) {
             Size = DEFAULT_SIZE;
             Body = BodyFactory.CreatePolygon( game.PhysicsWorld, PhysicsUtils.CreatePolygon( 3, Size.Y ), 1f );
+            Body.BodyType = FarseerPhysics.Dynamics.BodyType.Static;
         }
-
 
 
         public override void Init () {

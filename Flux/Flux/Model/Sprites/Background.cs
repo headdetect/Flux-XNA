@@ -12,7 +12,6 @@ namespace Flux.Model.Sprites {
         internal Background ( FluxGame gaem )
             : base ( gaem ) {
 
-            
         }
 
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {

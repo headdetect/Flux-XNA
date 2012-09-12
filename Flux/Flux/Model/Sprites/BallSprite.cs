@@ -20,16 +20,17 @@ namespace Flux.Model.Sprites {
 
         readonly Vector2 spawnPos;
 
-        
+
 
         public BallSprite ( FluxGame fluxGame )
             : this ( fluxGame, DEFAULT_SIZE ) { }
 
         public BallSprite ( FluxGame fluxGame, Vector2 spawnPos )
             : base ( fluxGame, DEFAULT_SIZE, spawnPos ) {
+
             this.spawnPos = spawnPos;
-            this.Body = BodyFactory.CreateCircle( Flux.PhysicsWorld, ConvertUnits.ToSimUnits( Size.X ), 1f, ConvertUnits.ToSimUnits( Position ) );
-            this.Body.CreateFixture( new CircleShape( Size.X / PhysicsUtils.PixelsToMeterRatio, 2f ) );
+            this.Body = BodyFactory.CreateCircle ( Flux.PhysicsWorld, ConvertUnits.ToSimUnits ( Size.X ), 1f, ConvertUnits.ToSimUnits ( Position ) );
+            this.Body.CreateFixture ( new CircleShape ( ConvertUnits.ToSimUnits ( Size.X ), 2f ) );
             this.Body.FixtureList[ 0 ].Restitution = .2f;
             this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
 
@@ -70,7 +71,7 @@ namespace Flux.Model.Sprites {
             } else {
 
                 //Slow down the rotations
-                if ( (int)spinIterations > 0 ) {
+                if ( (int) spinIterations > 0 ) {
                     spinIterations -= 1.1f;
                 } else if ( (int) spinIterations < 0 ) {
                     spinIterations += 1.1f;
@@ -95,7 +96,7 @@ namespace Flux.Model.Sprites {
             } else if ( state.IsKeyDown ( Keys.D ) ) {
                 this.spinIterations = 3.5f * speedModifier;
                 this.Body.ApplyForce ( new Vector2 ( 20f * speedModifier, 0f ), new Vector2 ( this.Body.Position.X, this.Body.Position.Y / 2 ) );
-            } 
+            }
 
 
 

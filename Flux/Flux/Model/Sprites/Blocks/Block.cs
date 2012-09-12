@@ -5,6 +5,8 @@ using System.Text;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics.Contacts;
+using Microsoft.Xna.Framework.Input;
+using FarseerPhysics;
 
 namespace Flux.Model.Sprites.Blocks {
 
@@ -29,8 +31,7 @@ namespace Flux.Model.Sprites.Blocks {
 
                 if ( value ) {
                     //TODO: show rotate block option
-                }
-                else {
+                } else {
                     //TODO: hide rotate block option
                 }
             }
@@ -50,8 +51,7 @@ namespace Flux.Model.Sprites.Blocks {
 
                 if ( value ) {
                     //TODO: show move block option
-                }
-                else {
+                } else {
                     //TODO: hide move block option
                 }
             }
@@ -81,26 +81,41 @@ namespace Flux.Model.Sprites.Blocks {
             return true;
         }
 
+        public override void Update ( GameTime gameTime ) {
+            MouseState state = Mouse.GetState ();
+
+            if ( state.LeftButton == ButtonState.Pressed ) {
+
+                //TODO: fix position
+
+                if ( IsInBounds ( state.X, state.Y ) ) {
+                    Body.Position = ConvertUnits.ToSimUnits ( new Vector2 ( state.X, state.Y ) );
+                }
+            }
+
+            base.Update ( gameTime );
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        public Block ( FluxGame game, Vector2 size, Vector2 position ) : base( game, size, position ) {}
+        public Block ( FluxGame game, Vector2 size, Vector2 position ) : base ( game, size, position ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="size">The size.</param>
-        public Block ( FluxGame game, Vector2 size ) : base( game, size ) { }
+        public Block ( FluxGame game, Vector2 size ) : base ( game, size ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        public Block ( FluxGame game ) : base( game ) { }
+        public Block ( FluxGame game ) : base ( game ) { }
 
     }
 }

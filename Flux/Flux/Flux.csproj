@@ -60,9 +60,9 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FarseerPhysicsXNA, Version=3.3.4629.37410, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="FarseerPhysicsXNA, Version=3.3.4638.12716, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Box2D.XNA\Farseer Physics Engine 3.3 XNA\bin\x86\Debug\FarseerPhysicsXNA.dll</HintPath>
+      <HintPath>Externs\FarseerPhysicsXNA.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
@@ -147,6 +147,7 @@
     <Compile Include="Utils\VectorUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Externs\FarseerPhysicsXNA.dll" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
