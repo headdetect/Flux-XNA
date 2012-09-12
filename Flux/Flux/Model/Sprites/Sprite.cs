@@ -148,7 +148,7 @@ namespace Flux.Model.Sprites {
         /// Draws this instance.
         /// </summary>
         public virtual void Draw ( GameTime gameTime ) {
-            Flux.SpriteBatch.Draw ( Texture, Position, null, Color.White, Convert.ToSingle ( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex  );
+            Flux.SpriteBatch.Draw( Texture, VectorUtils.VectorsToRectangle( Position, Size ), null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, SpriteEffect, ZIndex );
         }
 
 

@@ -7,6 +7,7 @@ using Flux.Managers;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework.Graphics;
 using Flux.Utils;
+using FarseerPhysics;
 
 namespace Flux.Model.Sprites {
     public class WallSprite : PhysicsSprite {
@@ -16,7 +17,7 @@ namespace Flux.Model.Sprites {
         public WallSprite ( FluxGame fluxGame, Vector2 position, int width, int height )
             : base( fluxGame, new Vector2( width, height ), position ) {
 
-                this.Body = BodyFactory.CreateRectangle( Flux.PhysicsWorld, width / PhysicsUtils.PixelsToMeterRatio, height / PhysicsUtils.PixelsToMeterRatio, 1f, position / PhysicsUtils.PixelsToMeterRatio );
+                this.Body = BodyFactory.CreateRectangle( Flux.PhysicsWorld, ConvertUnits.ToSimUnits( Size.X ), ConvertUnits.ToSimUnits( Size.Y ), 1f, ConvertUnits.ToSimUnits( Position ) );
                 //this.Origin = Vector2.Zero;
         }
 

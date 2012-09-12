@@ -12,6 +12,11 @@ namespace Flux.Display {
         private FluxGame Game { get; set; }
 
         /// <summary>
+        /// Gets the center of the camera.
+        /// </summary>
+        public Vector2 Center { get { return new Vector2( Width, Height ) / 2f; } }
+
+        /// <summary>
         /// Gets or sets the sprite to follow.
         /// </summary>
         /// <value>

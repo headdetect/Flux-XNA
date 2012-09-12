@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using FarseerPhysics.Common;
 
 namespace Flux.Utils {
     public class PhysicsUtils {
@@ -24,7 +25,7 @@ namespace Flux.Utils {
         /// <param name="n">The number of sides.</param>
         /// <param name="r">The radius size.</param>
         /// <returns>An array of Vector2s</returns>
-        public static Vector2[] CreatePolygon ( int n, float r ) {
+        public static Vertices CreatePolygon ( int n, float r ) {
             if ( n < 2 ) {
                 throw new ArithmeticException( "Number of sides must be greater than 2" );
             }
@@ -33,7 +34,8 @@ namespace Flux.Utils {
             for ( int i = 0; i < n; i++ ) {
                 verts[ i ] = new Vector2( r * (float) Math.Cos( 2 * Math.PI * i / n ), r * (float) Math.Sin( 2 * Math.PI * i / n ) );
             }
-            return verts;
+
+            return new Vertices(verts);
         }
     }
 }

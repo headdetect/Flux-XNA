@@ -55,6 +55,7 @@ namespace Flux {
 
             this.IsFixedTimeStep = true;
             FarseerPhysics.Settings.MaxPolygonVertices = 11;
+            FarseerPhysics.ConvertUnits.SetDisplayUnitToSimUnitRatio( 64f );
 
 #if !DEBUG
             Graphics.PreferredBackBufferHeight = 1080;

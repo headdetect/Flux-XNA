@@ -10,6 +10,7 @@ using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Audio;
 using Flux.Utils;
+using FarseerPhysics;
 
 namespace Flux.Model.Sprites {
 
@@ -27,10 +28,11 @@ namespace Flux.Model.Sprites {
         public BallSprite ( FluxGame fluxGame, Vector2 spawnPos )
             : base ( fluxGame, DEFAULT_SIZE, spawnPos ) {
             this.spawnPos = spawnPos;
-            this.Body = BodyFactory.CreateCircle( Flux.PhysicsWorld, Size.X / PhysicsUtils.PixelsToMeterRatio, 1f, spawnPos / PhysicsUtils.PixelsToMeterRatio );
+            this.Body = BodyFactory.CreateCircle( Flux.PhysicsWorld, ConvertUnits.ToSimUnits( Size.X ), 1f, ConvertUnits.ToSimUnits( Position ) );
             this.Body.CreateFixture( new CircleShape( Size.X / PhysicsUtils.PixelsToMeterRatio, 2f ) );
-            this.Body.FixtureList[ 0 ].Restitution = .3f;
+            this.Body.FixtureList[ 0 ].Restitution = .2f;
             this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
+
             this.Body.AngularDamping = 25f;
             this.Body.Friction = 25f;
 
@@ -45,18 +47,6 @@ namespace Flux.Model.Sprites {
         public override void Update ( GameTime gameTime ) {
             KeyboardState state = Keyboard.GetState ();
 
-
-#if WINDOWS            
-            MouseState mState = Mouse.GetState ();
-            if ( mState.LeftButton == ButtonState.Pressed) {
-                this.Body.ResetDynamics ();
-                this.Body.Position = (Flux.Camera.Position + new Vector2( mState.X, mState.Y )) / (64f * Flux.Camera.Zoom);
-                this.spinIterations = 0;
-                this.Body.Rotation = 0;
-                base.Update ( gameTime );
-                return;
-            }
-#endif
 
 
             if ( state.IsKeyDown ( Keys.Enter ) ) {
