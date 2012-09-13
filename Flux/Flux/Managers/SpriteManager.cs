@@ -15,6 +15,8 @@ namespace Flux.Managers {
 
         public Sprite BackgroundSprite;
 
+        public readonly RotationOverlaySprite RotationOverlay;
+
         /// <summary>
         /// Gets or sets the sprites.
         /// </summary>
@@ -27,6 +29,8 @@ namespace Flux.Managers {
             Sprites = new List<Sprite>( 255 );
             BackgroundSprite = game.Background;
             BackgroundSprite.Init ();
+
+            RotationOverlay = new RotationOverlaySprite( game );
         }
 
         /// <summary>

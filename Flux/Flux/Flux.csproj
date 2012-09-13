@@ -135,6 +135,7 @@
     <Compile Include="Model\Sprites\Blocks\Block.cs" />
     <Compile Include="Model\Sprites\Blocks\EqualTriangleBlock.cs" />
     <Compile Include="Model\Sprites\PhysicsSprite.cs" />
+    <Compile Include="Model\Sprites\RotationOverlaySprite.cs" />
     <Compile Include="Model\Sprites\Tools\EqualTriangleTool.cs" />
     <Compile Include="Model\Sprites\Tools\Tool.cs" />
     <Compile Include="Model\Sprites\Sprite.cs" />

@@ -23,6 +23,10 @@ namespace Flux.Managers {
 
         public Texture2D TriangleTexture_Hover;
 
+        public Texture2D RotationOverlay;
+
+        public Texture2D MoveOverlay;
+
         #endregion
 
         #region Fonts
@@ -40,6 +44,8 @@ namespace Flux.Managers {
             ToolBoxTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/ToolBoxTexture" );
             TriangleTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/TriangleTexture" );
             TriangleTexture_Hover = fluxGame.Content.Load<Texture2D>( theme + "/Textures/TriangleTexture_Hover" );
+            RotationOverlay = fluxGame.Content.Load<Texture2D>( theme + "/Textures/RotationOverlay" );
+            MoveOverlay = fluxGame.Content.Load<Texture2D>( theme + "/Textures/MoveOverlay" );
 
 
             FPSFont = fluxGame.Content.Load<SpriteFont>( "Fonts/fpsfont" );

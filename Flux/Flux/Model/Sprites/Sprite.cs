@@ -11,12 +11,14 @@ using Flux.Utils;
 
 namespace Flux.Model.Sprites {
 
+
     public abstract class Sprite {
 
         /// <summary>
         /// Gets the flux game.
         /// </summary>
         internal FluxGame Flux { get; private set; }
+
 
         /// <summary>
         /// Gets or sets the texture.
@@ -102,7 +104,13 @@ namespace Flux.Model.Sprites {
         private float _zoomScale = 1f; //Default zoom scale
 
 
-
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Sprite"/> is visible.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if visible; otherwise, <c>false</c>.
+        /// </value>
+        public bool Visible { get; set; }
 
         /// <summary>
         /// Initializes a new empty instance of the <see cref="Sprite"/> class.
@@ -110,6 +118,7 @@ namespace Flux.Model.Sprites {
         /// <param name="fluxGame">The flux game.</param>
         public Sprite ( FluxGame fluxGame ) {
             this.Flux = fluxGame;
+            this.Visible = true;
         }
 
         /// <summary>
@@ -121,7 +130,8 @@ namespace Flux.Model.Sprites {
             this.Flux = fluxGame;
             this.Size = size;
 
-            this.Origin = new Vector2 ( size.X, size.Y ) / 2f;
+            this.Origin = new Vector2( size.X, size.Y ) / 2f;
+            this.Visible = true;
         }
 
         /// <summary>
@@ -135,7 +145,8 @@ namespace Flux.Model.Sprites {
             this.Size = size;
             this.Position = position;
 
-            this.Origin = new Vector2 ( size.X, size.Y ) / 2f;
+            this.Origin = new Vector2( size.X, size.Y ) / 2f;
+            this.Visible = true;
         }
 
 
@@ -144,7 +155,8 @@ namespace Flux.Model.Sprites {
         /// Draws this instance.
         /// </summary>
         public virtual void Draw ( GameTime gameTime ) {
-            Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
+            if ( Visible )
+                Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
         }
 
 
@@ -175,7 +187,7 @@ namespace Flux.Model.Sprites {
         ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
         /// </returns>
         public bool IsInBounds ( Vector2 point ) {
-            return IsInBounds ( point.X, point.Y );
+            return IsInBounds( point.X, point.Y );
         }
 
         /// <summary>
@@ -187,12 +199,12 @@ namespace Flux.Model.Sprites {
         ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
         /// </returns>
         public bool IsInBounds ( float x, float y ) {
-            Rectangle tangle = VectorUtils.VectorsToRectangle ( Position, Size );
+            Rectangle tangle = VectorUtils.VectorsToRectangle( Position, Size );
 
             if ( tangle.IsEmpty )
                 return false;
 
-            return tangle.Contains ( (int) x, (int) y );
+            return tangle.Contains( (int) x, (int) y );
         }
 
         #endregion

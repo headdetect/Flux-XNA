@@ -1,0 +1,76 @@
+﻿<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Quick Sprite Creation</Title>
+      <Author>Brayden (headdetect)</Author>
+      <Description>Creates a skeleton for creating a new sprite</Description>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>name</ID>
+          <ToolTip>Sprite name</ToolTip>
+          <Default>MySprite</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp">
+        <![CDATA[public class $name$ : Sprite
+	{
+  #region Constuctors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="$name$"/> class.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="position">The position.</param>
+        public $name$ ( FluxGame game, Vector2 size, Vector2 position ) : base( game, size, position ) {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="$name$"/> class.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="size">The size.</param>
+        public $name$ ( FluxGame game, Vector2 size ) : this( game, size, Vector2.Zero ) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="$name$"/> class.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        public $name$ ( FluxGame game ) : this( game, Vector2.Zero, Vector2.Zero ) { }
+        
+   #endregion
+   
+		$selected$$end$
+	}]]>
+      </Code>
+      <Imports>
+        <Import>
+          <Namespace>
+            Flux.Model.Sprites
+          </Namespace>
+        </Import>
+        <Import>
+          <Namespace>
+            Flux.Utils
+          </Namespace>
+        </Import>
+        <Import>
+          <Namespace>
+            FarseerPhysics
+          </Namespace>
+        </Import>
+        <Import>
+          <Namespace>
+            FarseerPhysics.Dynamics
+          </Namespace>
+        </Import>
+        <Import>
+          <Namespace>
+            Microsoft.Xna.Framework
+          </Namespace>
+        </Import>
+      </Imports>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Flux.Utils {
-    public class VectorUtils {
+    public static class VectorUtils {
 
         /// <summary>
         /// Turns to Vectors into a single rectangle
@@ -15,6 +15,29 @@ namespace Flux.Utils {
         /// <returns></returns>
         public static Rectangle VectorsToRectangle ( Vector2 start, Vector2 end ) {
             return new Rectangle( Convert.ToInt32( start.X ), Convert.ToInt32( start.Y ), Convert.ToInt32( end.X ), Convert.ToInt32( end.Y ) );
+        }
+
+
+        /// <summary>
+        /// Performs an conversion from <see cref="Microsoft.Xna.Framework.Point"/> to <see cref="Microsoft.Xna.Framework.Vector2"/>.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static Vector2 ToVector ( this Point point ) {
+            return new Vector2( point.X, point.Y );
+        }
+
+        /// <summary>
+        /// Performs an conversion from <see cref="Microsoft.Xna.Framework.Vector2"/> to <see cref="Microsoft.Xna.Framework.Point"/>.
+        /// </summary>
+        /// <param name="vector">The vector.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static Point ToPoint ( this Vector2 vector ) {
+            return new Point( (int)vector.X, (int)vector.Y );
         }
     }
 }
