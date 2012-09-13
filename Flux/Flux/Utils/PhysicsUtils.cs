@@ -14,11 +14,6 @@ namespace Flux.Utils {
         /// </summary>
         public static readonly Vector2 EarthGravity = new Vector2 ( 0, 9.81f );
 
-        /// <summary>
-        /// Pixels to meter ration in XNA, Value = 64f
-        /// </summary>
-        public const float PixelsToMeterRatio = 64f;
-
 
         /// <summary>
         /// Creates a polygon.

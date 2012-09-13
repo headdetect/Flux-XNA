@@ -17,6 +17,8 @@ namespace Flux.Managers {
 
         public readonly RotationOverlaySprite RotationOverlay;
 
+        public readonly MoveOverlaySprite MoveOverlay;
+
         /// <summary>
         /// Gets or sets the sprites.
         /// </summary>
@@ -25,12 +27,16 @@ namespace Flux.Managers {
         /// </value>
         public List<Sprite> Sprites { get; set; }
 
-        public SpriteManager (FluxGame game) {
-            Sprites = new List<Sprite>( 255 );
+        public SpriteManager ( FluxGame game ) {
+            Sprites = new List<Sprite> ( 255 );
             BackgroundSprite = game.Background;
             BackgroundSprite.Init ();
 
-            RotationOverlay = new RotationOverlaySprite( game );
+            RotationOverlay = new RotationOverlaySprite ( game );
+            MoveOverlay = new MoveOverlaySprite ( game );
+
+            RotationOverlay.Init ();
+            MoveOverlay.Init ();
         }
 
         /// <summary>
@@ -38,9 +44,9 @@ namespace Flux.Managers {
         /// </summary>
         /// <param name="sprite">The sprite.</param>
         public void Add ( Sprite sprite ) {
-            Sprites.Add( sprite );
+            Sprites.Add ( sprite );
             sprite.ID = Sprites.Count;
-            sprite.Init();
+            sprite.Init ();
         }
 
         /// <summary>
@@ -49,8 +55,8 @@ namespace Flux.Managers {
         /// <param name="sprite">The sprite.</param>
         /// <param name="animation">if set to <c>true</c> [animation].</param>
         public void Remove ( Sprite sprite, bool animation = true ) {
-            sprite.Destroy( animation );
-            Sprites.Remove( sprite );
+            sprite.Destroy ( animation );
+            Sprites.Remove ( sprite );
         }
 
         /// <summary>
@@ -58,10 +64,12 @@ namespace Flux.Managers {
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         internal void Update ( GameTime gameTime ) {
-            BackgroundSprite.Update( gameTime );
+            BackgroundSprite.Update ( gameTime );
+            RotationOverlay.Update ( gameTime );
+            MoveOverlay.Update ( gameTime );
 
             for ( int i = 0; i < Sprites.Count; i++ ) {
-                Sprites[ i ].Update( gameTime );
+                Sprites[ i ].Update ( gameTime );
             }
         }
 
@@ -70,10 +78,12 @@ namespace Flux.Managers {
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         internal void Draw ( GameTime gameTime ) {
-            BackgroundSprite.Draw( gameTime );
+            BackgroundSprite.Draw ( gameTime );
+            RotationOverlay.Draw ( gameTime );
+            MoveOverlay.Draw ( gameTime );
 
             for ( int i = 0; i < Sprites.Count; i++ ) {
-                Sprites[ i ].Draw( gameTime );
+                Sprites[ i ].Draw ( gameTime );
             }
         }
 

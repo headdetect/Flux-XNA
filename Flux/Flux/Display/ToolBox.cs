@@ -8,6 +8,7 @@ using Flux.Managers;
 using Microsoft.Xna.Framework;
 using Flux.Utils;
 using Flux.Model.Sprites.Blocks;
+using FarseerPhysics;
 
 namespace Flux.Display {
     public class ToolBox : IHUDComponent {
@@ -75,7 +76,7 @@ namespace Flux.Display {
                         SelectedSlot.Block = block;
                         block.HasMoveSettingActivated = true;
 
-                        block.Position = game.Camera.Center;
+                        block.Body.Position = ConvertUnits.ToSimUnits ( game.Camera.Center );
                         slot.Count--;
                     }
                 }

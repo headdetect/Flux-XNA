@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework.Input;
 using FarseerPhysics;
+using Flux.Utils;
 
 namespace Flux.Model.Sprites.Blocks {
 
@@ -50,9 +51,9 @@ namespace Flux.Model.Sprites.Blocks {
                 IsPlaced = !value;
 
                 if ( value ) {
-                    //TODO: show move block option
+                    Flux.SpriteManager.MoveOverlay.HoverBounds = VectorUtils.VectorsToRectangle ( ConvertUnits.ToDisplayUnits ( Body.Position ) - ConvertUnits.ToDisplayUnits ( Body.Position ) * 2, Size + Size * 2 );
                 } else {
-                    //TODO: hide move block option
+                    Flux.SpriteManager.MoveOverlay.HoverBounds = new Rectangle(-1, -1, -1, -1);
                 }
             }
         }
@@ -86,10 +87,12 @@ namespace Flux.Model.Sprites.Blocks {
 
             if ( state.LeftButton == ButtonState.Pressed ) {
 
-                //TODO: fix position
-
                 if ( IsInBounds ( state.X, state.Y ) ) {
-                    Body.Position = ConvertUnits.ToSimUnits ( new Vector2 ( state.X, state.Y ) );
+                    if ( !HasMoveSettingActivated ) {
+                        HasMoveSettingActivated = true;
+                    } else {
+                        Body.Position = ConvertUnits.ToSimUnits ( new Vector2 ( state.X, state.Y ) );
+                    }
                 }
             }
 
