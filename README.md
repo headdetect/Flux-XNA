@@ -19,16 +19,16 @@ Flux is a 2D game created first in XNA by headdetect. It's plan is to be ported 
 + `R` - Restart
 + `Esc` - Access Pause Menu
 
-##XBOX
+###XBOX
 [Coming Soon]
 
-##WinPhone
+###WinPhone
 [Coming eventually]
 
-##Android
+###Android
 [Prolly...idk]
 
-##iOS
+###iOS
 [um...]
 
 ---
