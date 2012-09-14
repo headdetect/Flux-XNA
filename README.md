@@ -13,12 +13,23 @@ Flux is a 2D game created first in XNA by headdetect. It's plan is to be ported 
 + You can use items in your toolbox to help you get to the goal. 
 
 ##Controls
-###XNA
+###PC
 + `Space` - Spin your ball
 + `Mouse Left-Click` - Action (Move blocks, click on stuff, etc..)
 + `R` - Restart
 + `Esc` - Access Pause Menu
 
+##XBOX
+[Coming Soon]
+
+##WinPhone
+[Coming eventually]
+
+##Android
+[Prolly...idk]
+
+##iOS
+[um...]
 
 ---
 
