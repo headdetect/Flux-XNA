@@ -15,6 +15,7 @@ using FarseerPhysics.Dynamics;
 using Flux.Display;
 using Flux.Model;
 using Flux.Utils;
+using System.Diagnostics;
 
 namespace Flux {
     /// <summary>
@@ -140,12 +141,13 @@ namespace Flux {
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        [DebuggerStepThrough]
         protected override void Update ( GameTime gameTime ) {
             if ( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.F12 ) )
                 this.Exit();
 
             PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
-            Camera.Update();
+            Camera.Update( gameTime );
             SpriteManager.Update( gameTime );
             
 #if DEBUG
@@ -167,7 +169,7 @@ namespace Flux {
         protected override void Draw ( GameTime gameTime ) {
             GraphicsDevice.Clear( Color.Black );
 
-            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, null, null, null, Camera.Transform );
+            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, null, null, null, Camera.View );
 
             SpriteManager.Draw( gameTime );
 

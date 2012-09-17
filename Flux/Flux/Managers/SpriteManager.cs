@@ -5,6 +5,7 @@ using System.Text;
 using Flux.Model.Sprites;
 using Microsoft.Xna.Framework;
 using Flux.Utils;
+using System.Diagnostics;
 
 namespace Flux.Managers {
 
@@ -63,6 +64,7 @@ namespace Flux.Managers {
         /// Updates all sprites with a specified game time.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
+        [DebuggerStepThrough]
         internal void Update ( GameTime gameTime ) {
             BackgroundSprite.Update ( gameTime );
             RotationOverlay.Update ( gameTime );
@@ -77,6 +79,7 @@ namespace Flux.Managers {
         /// Draws all sprites with the specified game time.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
+       [DebuggerStepThrough]
         internal void Draw ( GameTime gameTime ) {
             BackgroundSprite.Draw ( gameTime );
             RotationOverlay.Draw ( gameTime );

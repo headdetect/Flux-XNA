@@ -51,9 +51,9 @@ namespace Flux.Model.Sprites.Blocks {
                 IsPlaced = !value;
 
                 if ( value ) {
-                    Flux.SpriteManager.MoveOverlay.HoverBounds = VectorUtils.VectorsToRectangle ( ConvertUnits.ToDisplayUnits ( Body.Position ) - ConvertUnits.ToDisplayUnits ( Body.Position ) * 2, Size + Size * 2 );
+                    //Flux.SpriteManager.MoveOverlay.SetBoundsWithBody( Body, Size );
                 } else {
-                    Flux.SpriteManager.MoveOverlay.HoverBounds = new Rectangle(-1, -1, -1, -1);
+                    //Flux.SpriteManager.MoveOverlay.SetBoundsWithBody( null, Vector2.Zero );
                 }
             }
         }

@@ -17,6 +17,7 @@ namespace Flux.Display {
         /// </summary>
         public readonly int Height;
 
+
         /// <summary>
         /// Gets or sets the HUD objects, limited to 25 elements.
         /// </summary>

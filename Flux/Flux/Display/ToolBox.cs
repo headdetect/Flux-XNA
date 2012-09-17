@@ -13,37 +13,64 @@ using FarseerPhysics;
 namespace Flux.Display {
     public class ToolBox : IHUDComponent {
 
+        readonly FluxGame game;
         readonly Vector2 Size = new Vector2( 400, 70 );
+        readonly Vector2 screenSize;
+        readonly Vector2 toolPos;
 
-        FluxGame game;
 
+        /// <summary>
+        /// Gets or sets the tools.
+        /// </summary>
+        /// <value>
+        /// The tools.
+        /// </value>
         public List<Tool> Tools { get; set; }
 
+        /// <summary>
+        /// Gets or sets the selected slot.
+        /// </summary>
+        /// <value>
+        /// The selected slot.
+        /// </value>
         public Slot SelectedSlot { get; set; }
 
+        /// <summary>
+        /// All of the slots in the toolbox (6 slots)
+        /// </summary>
         public readonly Slot[] Slots = new Slot[ 6 ];
 
-        private readonly Vector2 screenSize;
-        private readonly Vector2 toolPos;
+        /// <summary>
+        /// List of active blocks in the playing field
+        /// </summary>
+        public readonly List<Block> ActiveBlocks;
+
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolBox"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        public ToolBox ( FluxGame game ) {
-            this.game = game;
-
-            screenSize = new Vector2( game.HUD.Width, game.HUD.Height );
-            toolPos = new Vector2( screenSize.X / 2, screenSize.Y - Size.Y / 2 );
-
-
+        public ToolBox ( FluxGame game )
+            : this( game, new Slot[ 6 ] ) {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ToolBox"/> class.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="slots">The slots.</param>
         public ToolBox ( FluxGame game, Slot[] slots ) {
             this.game = game;
             this.Slots = slots;
+
+            this.screenSize = new Vector2( game.HUD.Width, game.HUD.Height );
+            this.toolPos = new Vector2( screenSize.X / 2, screenSize.Y - Size.Y / 2 );
+
+            this.ActiveBlocks = new List<Block>();
         }
 
+        //Overriden
         public void Init () {
             for ( int i = 0; i < 6; i++ ) {
                 Slots[ i ] = new Slot( new EqualTriangleTool( game ), 4 );
@@ -57,6 +84,7 @@ namespace Flux.Display {
             }
         }
 
+        //Overriden
         public void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
             MouseState state = Mouse.GetState();
             Slot slot = GetSlot( state );
@@ -72,11 +100,12 @@ namespace Flux.Display {
                     //shouldn't be not null (wat)
                     if ( SelectedSlot.Block == null ) {
                         Block block = GetBlock( SelectedSlot.Tool.BlockForm );
-                        game.SpriteManager.Add( block );
+                        ActiveBlocks.Add( block );
                         SelectedSlot.Block = block;
                         block.HasMoveSettingActivated = true;
+                        block.Body.Position = ConvertUnits.ToSimUnits( new Vector2( game.HUD.Width / 2, game.HUD.Height / 2 ) );
 
-                        block.Body.Position = ConvertUnits.ToSimUnits ( game.Camera.Center );
+                        game.SpriteManager.Add( block );
                         slot.Count--;
                     }
                 }
@@ -87,6 +116,7 @@ namespace Flux.Display {
 
         const int PAD = 11;
 
+        //Overriden
         public void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
             game.SpriteBatch.Begin();
 
@@ -106,7 +136,7 @@ namespace Flux.Display {
             game.SpriteBatch.End();
         }
 
-        Slot GetSlot ( MouseState state ) {
+        internal Slot GetSlot ( MouseState state ) {
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
 
@@ -119,7 +149,7 @@ namespace Flux.Display {
             return null;
         }
 
-        Block GetBlock ( Type type ) {
+        internal Block GetBlock ( Type type ) {
             if ( type.BaseType != typeof( Block ) ) {
                 throw new ArgumentException( "Specified type is not a block" );
             }
@@ -135,26 +165,65 @@ namespace Flux.Display {
 
     }
 
+    /// <summary>
+    /// Class contaning info on slots.
+    /// </summary>
     public class Slot {
 
+        /// <summary>
+        /// Gets or sets the tool.
+        /// </summary>
+        /// <value>
+        /// The tool.
+        /// </value>
         public Tool Tool { get; set; }
 
+        /// <summary>
+        /// Gets or sets the block.
+        /// </summary>
+        /// <value>
+        /// The block.
+        /// </value>
         public Block Block { get; set; }
 
+        /// <summary>
+        /// Gets or sets the count.
+        /// </summary>
+        /// <value>
+        /// The count.
+        /// </value>
         public int Count { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is hovered over.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is hovered over; otherwise, <c>false</c>.
+        /// </value>
         public bool IsHoveredOver { get; set; }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Slot"/> class.
+        /// </summary>
         public Slot () {
             Count = -1;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Slot"/> class.
+        /// </summary>
+        /// <param name="tool">The tool.</param>
         public Slot ( Tool tool ) {
             Count = 1;
             Tool = tool;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Slot"/> class.
+        /// </summary>
+        /// <param name="tool">The tool.</param>
+        /// <param name="count">The count.</param>
         public Slot ( Tool tool, int count ) {
             Count = count;
             Tool = tool;

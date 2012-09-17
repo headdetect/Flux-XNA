@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Flux.Utils;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics;
 
 namespace Flux.Model.Sprites {
     public class MoveOverlaySprite : Sprite {
@@ -50,6 +52,18 @@ namespace Flux.Model.Sprites {
         /// <param name="sprite">The sprite.</param>
         public void SetBoundsWithSprite ( Sprite sprite ) {
             HoverBounds = VectorUtils.VectorsToRectangle ( sprite.Position, sprite.Size );
+        }
+
+        /// <summary>
+        /// Sets the bounds with a body.
+        /// </summary>
+        /// <param name="body">The body.</param>
+        /// <param name="size">The size.</param>
+        public void SetBoundsWithBody ( Body body, Vector2 size ) {
+            if(body == null){
+                HoverBounds = new Rectangle();
+            }
+            HoverBounds = VectorUtils.VectorsToRectangle( ConvertUnits.ToDisplayUnits( body.Position ) - ConvertUnits.ToDisplayUnits( body.Position ) * 2, size + size * 2 );
         }
 
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {

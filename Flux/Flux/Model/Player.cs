@@ -23,7 +23,7 @@ namespace Flux.Model {
         public Player ( FluxGame game ) {
             this.game = game;
 
-            Sprite = new BallSprite( game, new Vector2( game.Camera.Width / 4, game.Camera.Height / 4 ) );
+            Sprite = new BallSprite( game, new Vector2( game.HUD.Width / 4, game.HUD.Height / 4 ) );
             game.HUD.HUDObjects.Add( new SpeedComponent( game ) );
             game.SpriteManager.Add(Sprite);
         }
