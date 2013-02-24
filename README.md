@@ -6,14 +6,14 @@ Flux-XNA
 Flux is a 2D game created first in XNA by headdetect. It's plan is to be ported to several other devices/languages.
 
 
-##Objective
+##Objective (Not fully implemented) 
 + Your objective as the player is to get the ball to touch the goal. 
 + There are objects in your way blocking you. 
 + The only way you can move is by spinning your ball over/to 100 MPH and letting it fly. 
 + You can use items in your toolbox to help you get to the goal. 
 
 ##Controls
-###PC
+###PC (Not fully implemented) 
 + `Space` - Spin your ball
 + `Mouse Left-Click` - Action (Move blocks, click on stuff, etc..)
 + `R` - Restart
@@ -21,9 +21,6 @@ Flux is a 2D game created first in XNA by headdetect. It's plan is to be ported 
 
 ###XBOX
 [Coming Soon]
-
-###WinPhone
-[Coming eventually]
 
 ###Android
 [Prolly...idk]
@@ -34,9 +31,10 @@ Flux is a 2D game created first in XNA by headdetect. It's plan is to be ported 
 ---
 
 ##Development
-###Theme making 
+###Themes
+
 Currently the only way to make a new theme is by creating a new launcher and setting the theme directory (With compiled assets).
-However, in the future, I will make it changeable through an interactive menu.
+However, in the future, I will make it changeable through an interactive menu of sorts.
 
 ###Reqest a pull
 I will requests pulls if they:
