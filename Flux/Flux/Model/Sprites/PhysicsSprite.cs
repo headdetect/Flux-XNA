@@ -9,6 +9,7 @@ using Flux.Utils;
 using FarseerPhysics;
 
 namespace Flux.Model.Sprites {
+
     public abstract class PhysicsSprite : Sprite {
 
         /// <summary>
@@ -28,11 +29,23 @@ namespace Flux.Model.Sprites {
         /// </value>
         public Vertices Vertices { get; set; }
 
+        /// <summary>
+        /// Gets or sets the position.
+        /// </summary>
+        /// <value>
+        /// The position.
+        /// </value>
         public new Vector2 Position {
             get { return Body != null ? ConvertUnits.ToDisplayUnits( Body.Position ) : base.Position; }
             set { if ( Body != null ) Body.Position = ConvertUnits.ToSimUnits( value ); }
         }
 
+        /// <summary>
+        /// Gets or sets the rotation. Rotation goes from 0 - 359 degrees.
+        /// </summary>
+        /// <value>
+        /// The rotation.
+        /// </value>
         public new float Rotation {
             get { return Body != null ? ConvertUnits.ToDisplayUnits( Body.Rotation ) : base.Rotation; }
             set { if ( Body != null ) Body.Rotation = ConvertUnits.ToSimUnits( value ); }
@@ -45,9 +58,7 @@ namespace Flux.Model.Sprites {
         /// <param name="game">The game.</param>
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        protected PhysicsSprite ( FluxGame game, Vector2 size, Vector2 position )
-            : base( game, size, position ) {
-        }
+        protected PhysicsSprite ( FluxGame game, Vector2 size, Vector2 position ): base( game, size, position ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PhysicsSprite"/> class.
@@ -62,13 +73,14 @@ namespace Flux.Model.Sprites {
         /// <param name="game">The game.</param>
         protected PhysicsSprite ( FluxGame game ) : this( game, Vector2.Zero, Vector2.Zero ) { }
 
+
         /// <summary>
         /// Updates this instance.
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update ( GameTime gameTime ) {
 
-            //The getters and setters are overridden. 
+            //The properties are overridden from parent class. 
             
             base.Position = Position;
             base.Rotation = Rotation;
@@ -107,10 +119,25 @@ namespace Flux.Model.Sprites {
             return !tangle.IsEmpty && tangle.Contains( (int) x, (int) y );
         }
 
+        /// <summary>
+        /// Determines whether the points are in the bounds of the polygon sprite
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns>
+        ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsInPolygonBounds ( Vector2 point ) {
             return IsInPolygonBounds( point.X, point.Y );
         }
 
+        /// <summary>
+        /// Determines whether the points are in the bounds of the polygon sprite.
+        /// </summary>
+        /// <param name="X">The x.</param>
+        /// <param name="Y">The y.</param>
+        /// <returns>
+        ///   <c>true</c> if the points are in the bounds of the sprite; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsInPolygonBounds ( float X, float Y ) {
             if ( Vertices == null ) {
                 return false;

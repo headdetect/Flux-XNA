@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FarseerPhysics;
 using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 using Flux.Utils;
@@ -21,7 +22,7 @@ namespace Flux.Model.Sprites.Blocks {
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
         public EqualTriangleBlock ( FluxGame game, Vector2 size, Vector2 position )
-            : base( game) {
+            : base( game ) {
 
             float width = ConvertUnits.ToSimUnits( size.X );
             float height = ConvertUnits.ToSimUnits( size.Y );
@@ -35,10 +36,10 @@ namespace Flux.Model.Sprites.Blocks {
             float right = halfWidth;
 
             Vector2[] vertices = { new Vector2( centerX, top ), new Vector2( right, bottom ), new Vector2( left, bottom ) };
-            Vertices = new Vertices ( vertices );
+            Vertices = new Vertices( vertices );
 
             Body = BodyFactory.CreatePolygon( game.PhysicsWorld, Vertices, 1f );
-            Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
+            Body.BodyType = BodyType.Static;
 
             this.Position = position;
             this.Size = size;

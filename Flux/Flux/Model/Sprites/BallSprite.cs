@@ -52,9 +52,9 @@ namespace Flux.Model.Sprites {
 
             if ( state.IsKeyDown ( Keys.Enter ) ) {
                 this.Body.ResetDynamics ();
-                this.Body.Position = ConvertUnits.ToSimUnits ( spawnPos );
+                this.Position = spawnPos ;
                 this.spinIterations = 0;
-                this.Body.Rotation = 0;
+                this.Rotation = 0;
                 base.Update ( gameTime );
                 return;
             }
@@ -100,7 +100,7 @@ namespace Flux.Model.Sprites {
 
 
 
-            this.Body.Rotation += spinIterations;
+            this.Rotation += spinIterations;
 
             base.Update ( gameTime );
 

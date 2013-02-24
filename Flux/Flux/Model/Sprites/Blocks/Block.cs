@@ -106,7 +106,7 @@ namespace Flux.Model.Sprites.Blocks {
             }
 
             if ( hasHold ) {
-                Body.Position = ConvertUnits.ToSimUnits( new Vector2( state.X, state.Y ) + Size / 2f );
+                Position = new Vector2 ( state.X, state.Y ) + Size / 2f;
             }
 
             base.Update( gameTime );

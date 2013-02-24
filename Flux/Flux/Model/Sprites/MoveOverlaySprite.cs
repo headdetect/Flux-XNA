@@ -60,10 +60,7 @@ namespace Flux.Model.Sprites {
         /// <param name="body">The body.</param>
         /// <param name="size">The size.</param>
         public void SetBoundsWithBody ( Body body, Vector2 size ) {
-            if(body == null){
-                HoverBounds = new Rectangle();
-            }
-            HoverBounds = VectorUtils.VectorsToRectangle( ConvertUnits.ToDisplayUnits( body.Position ) - ConvertUnits.ToDisplayUnits( body.Position ) * 2, size + size * 2 );
+            HoverBounds = body == null ? new Rectangle() : VectorUtils.VectorsToRectangle ( ConvertUnits.ToDisplayUnits ( body.Position ) - ConvertUnits.ToDisplayUnits ( body.Position ) * 2, size + size * 2 );
         }
 
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {

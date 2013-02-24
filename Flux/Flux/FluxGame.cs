@@ -60,7 +60,6 @@ namespace Flux {
             Content.RootDirectory = "Content";
 
             this.IsFixedTimeStep = true;
-            FarseerPhysics.Settings.MaxPolygonVertices = 11;
             ConvertUnits.SetDisplayUnitToSimUnitRatio( 64f );
 
             PhysicsWorld = new World( PhysicsUtils.EarthGravity );
