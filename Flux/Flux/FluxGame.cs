@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FarseerPhysics;
+using FarseerPhysics.DebugViews;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -36,6 +38,8 @@ namespace Flux {
         public Flux.Managers.ContentManager TextureManager;
         public SpriteManager SpriteManager;
 
+        private DebugViewXNA _debugView;
+
         //-- Game Entities --//
 
         public Background Background;
@@ -44,6 +48,7 @@ namespace Flux {
         public HUD HUD;
         public Player Player;
         public ToolBox ToolBox;
+
 
 #if DEBUG
         public DebugForm DebugForm;
@@ -56,7 +61,12 @@ namespace Flux {
 
             this.IsFixedTimeStep = true;
             FarseerPhysics.Settings.MaxPolygonVertices = 11;
-            FarseerPhysics.ConvertUnits.SetDisplayUnitToSimUnitRatio( 64f );
+            ConvertUnits.SetDisplayUnitToSimUnitRatio( 64f );
+
+            PhysicsWorld = new World( PhysicsUtils.EarthGravity );
+
+            Graphics.PreferredBackBufferHeight = 600;
+            Graphics.PreferredBackBufferWidth = 1200;
 
 #if !DEBUG
             Graphics.PreferredBackBufferHeight = 1080;
@@ -85,8 +95,12 @@ namespace Flux {
             Camera = new Camera( this );
             HUD = new HUD( this );
             HUD.HUDObjects.Add( new FPSComponent( this ) );
+            HUD.HUDObjects.Add( new CursorLocationComponent( this ) );
 
             Components.Add( HUD );
+
+
+
             base.Initialize();
         }
 
@@ -103,29 +117,28 @@ namespace Flux {
             TextureManager = new Managers.ContentManager( this );
             SpriteManager = new SpriteManager( this );
 
-
-
-            PhysicsWorld = new World( PhysicsUtils.EarthGravity );
+            
 
             /* Top Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( 0, -HUD.Height / 2 ), HUD.Width, 30 ) );
+            //SpriteManager.Add( new WallSprite( this, new Vector2( 0, -HUD.Height / 2f ), HUD.Width, 30 ) );
 
             /* Left Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( -HUD.Width / 2,  0), 30, HUD.Height ) );
+            //SpriteManager.Add( new WallSprite( this, new Vector2( -HUD.Width / 2f, 0 ), 30, HUD.Height ) );
 
             /* Right Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( HUD.Width / 2 - 15, 0 ), 30, HUD.Height ) );
+            //SpriteManager.Add( new WallSprite( this, new Vector2( HUD.Width / 2f - 15, 0 ), 30, HUD.Height ) );
 
             /* Bottom Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( 0, HUD.Height / 2 - 15 ), HUD.Width, 30 ) );
+            SpriteManager.Add( new WallSprite( this, new Vector2( 0, HUD.Height / 2f - 15 ), HUD.Width, 30 ) );
 
 
             ToolBox = new Display.ToolBox( this );
             HUD.HUDObjects.Add( ToolBox );
             Player = new Player( this );
-           // Camera.SpriteToFollow = Player.Sprite;
 
             HUD.Initialize();
+
+            SetupDebug();
         }
 
         /// <summary>
@@ -149,7 +162,7 @@ namespace Flux {
             PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
             Camera.Update( gameTime );
             SpriteManager.Update( gameTime );
-            
+
 #if DEBUG
             if ( Keyboard.GetState().IsKeyDown( Keys.H ) ) {
                 if ( DebugForm == null )
@@ -160,7 +173,7 @@ namespace Flux {
 
             base.Update( gameTime );
         }
-        
+
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -169,13 +182,40 @@ namespace Flux {
         protected override void Draw ( GameTime gameTime ) {
             GraphicsDevice.Clear( Color.Black );
 
-            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, null, null, null, Camera.View );
+            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.View );
 
             SpriteManager.Draw( gameTime );
 
             SpriteBatch.End();
 
+            DrawDebugData ();
+
             base.Draw( gameTime );
         }
+
+        #region DEBUG
+
+        private void SetupDebug() {
+            // create and configure the debug view
+            _debugView = new DebugViewXNA( this, PhysicsWorld );
+
+            //_debugView.AppendFlags(DebugViewFlags.PerformanceGraph);
+            _debugView.AppendFlags(DebugViewFlags.CenterOfMass);
+            _debugView.AppendFlags(DebugViewFlags.Shape);
+            //_debugView.AppendFlags(DebugViewFlags.AABB);
+
+            _debugView.DefaultShapeColor = Color.White;
+            _debugView.SleepingShapeColor = Color.LightGray;
+            _debugView.LoadContent( GraphicsDevice, Content );
+        }
+
+        private void DrawDebugData() {
+            Matrix proj = Matrix.CreateOrthographicOffCenter( 0f, HUD.Width, HUD.Height, 0f, 0f, 1f );
+            Matrix view2 = Matrix.CreateScale( 64 );
+            view2 *= Camera.View;
+            _debugView.RenderDebugData( ref proj, ref view2 );
+        }
+
+        #endregion
     }
 }

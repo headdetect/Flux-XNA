@@ -29,7 +29,7 @@ namespace Flux.Display {
 
         }
 
-        readonly string format = "{0} MPH";
+        private const string format = "{0}k RPM";
 
         public void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
             updateCount++;

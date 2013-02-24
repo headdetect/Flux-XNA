@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics.Contacts;
@@ -32,7 +33,8 @@ namespace Flux.Model.Sprites.Blocks {
 
                 if ( value ) {
                     //TODO: show rotate block option
-                } else {
+                }
+                else {
                     //TODO: hide rotate block option
                 }
             }
@@ -52,7 +54,8 @@ namespace Flux.Model.Sprites.Blocks {
 
                 if ( value ) {
                     //Flux.SpriteManager.MoveOverlay.SetBoundsWithBody( Body, Size );
-                } else {
+                }
+                else {
                     //Flux.SpriteManager.MoveOverlay.SetBoundsWithBody( null, Vector2.Zero );
                 }
             }
@@ -82,43 +85,55 @@ namespace Flux.Model.Sprites.Blocks {
             return true;
         }
 
+        private bool hasHold;
         public override void Update ( GameTime gameTime ) {
-            MouseState state = Mouse.GetState ();
+            MouseState state = Mouse.GetState();
 
-            if ( state.LeftButton == ButtonState.Pressed ) {
-
-                if ( IsInBounds ( state.X, state.Y ) ) {
-                    if ( !HasMoveSettingActivated ) {
-                        HasMoveSettingActivated = true;
-                    } else {
-                        Body.Position = ConvertUnits.ToSimUnits ( new Vector2 ( state.X, state.Y ) );
+            switch ( state.LeftButton ) {
+                case ButtonState.Pressed :
+                    if ( IsInBounds( state.X, state.Y ) ) {
+                        if ( !HasMoveSettingActivated ) {
+                            HasMoveSettingActivated = true;
+                        }
+                        else {
+                            hasHold = true;
+                        }
                     }
-                }
+                    break;
+                case ButtonState.Released :
+                    hasHold = false;
+                    break;
             }
 
-            base.Update ( gameTime );
+            if ( hasHold ) {
+                Body.Position = ConvertUnits.ToSimUnits( new Vector2( state.X, state.Y ) + Size / 2f );
+            }
+
+            base.Update( gameTime );
         }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        public Block ( FluxGame game, Vector2 size, Vector2 position ) : base ( game, size, position ) { }
+        /// <param name="size">The size</param>
+        protected Block ( FluxGame game, Vector2 position, Vector2 size ) : base( game, position, size ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="size">The size.</param>
-        public Block ( FluxGame game, Vector2 size ) : base ( game, size ) { }
+        protected Block ( FluxGame game, Vector2 size ) : base( game, size ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        public Block ( FluxGame game ) : base ( game ) { }
+        protected Block ( FluxGame game ) : base( game ) { }
+
 
     }
 }

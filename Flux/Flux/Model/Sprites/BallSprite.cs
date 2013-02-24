@@ -32,7 +32,7 @@ namespace Flux.Model.Sprites {
             this.Body = BodyFactory.CreateCircle ( Flux.PhysicsWorld, ConvertUnits.ToSimUnits ( Size.X ), 1f, ConvertUnits.ToSimUnits ( Position ) );
             this.Body.CreateFixture ( new CircleShape ( ConvertUnits.ToSimUnits ( Size.X ), 2f ) );
             this.Body.FixtureList[ 0 ].Restitution = .2f;
-            this.Body.BodyType = FarseerPhysics.Dynamics.BodyType.Dynamic;
+            this.Body.BodyType = BodyType.Dynamic;
 
             this.Body.AngularDamping = 25f;
             this.Body.Friction = 25f;
@@ -52,7 +52,7 @@ namespace Flux.Model.Sprites {
 
             if ( state.IsKeyDown ( Keys.Enter ) ) {
                 this.Body.ResetDynamics ();
-                this.Body.Position = spawnPos / 64f;
+                this.Body.Position = ConvertUnits.ToSimUnits ( spawnPos );
                 this.spinIterations = 0;
                 this.Body.Rotation = 0;
                 base.Update ( gameTime );

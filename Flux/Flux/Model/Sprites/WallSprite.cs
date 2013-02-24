@@ -22,10 +22,6 @@ namespace Flux.Model.Sprites {
         }
 
 
-        public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            base.Update( gameTime );
-        }
-
         public override void Init () {
             Texture = Flux.TextureManager.WallTexture;
         }

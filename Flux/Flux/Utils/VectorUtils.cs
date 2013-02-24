@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FarseerPhysics;
+using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 
 namespace Flux.Utils {
@@ -37,7 +39,15 @@ namespace Flux.Utils {
         /// The result of the conversion.
         /// </returns>
         public static Point ToPoint ( this Vector2 vector ) {
-            return new Point( (int)vector.X, (int)vector.Y );
+            return new Point( (int) vector.X, (int) vector.Y );
+        }
+
+        public static Vertices AddVertices ( Vertices vertices, Vector2 position ) {
+            Vertices verts = new Vertices( vertices.Count );
+            for ( int i = 0; i < vertices.Count; i++ ) {
+                verts.Add( vertices[ i ] + ConvertUnits.ToSimUnits(position) );
+            }
+            return verts;
         }
     }
 }

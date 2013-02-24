@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FarseerPhysics.Factories;
-using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
-using Flux.Utils;
-using FarseerPhysics.Common.PolygonManipulation;
-using FarseerPhysics.Dynamics;
 using Flux.Model.Sprites.Blocks;
 
-namespace Flux.Model.Sprites.Shapes {
+namespace Flux.Model.Sprites.Tools {
     public class EqualTriangleTool : Tool {
 
 

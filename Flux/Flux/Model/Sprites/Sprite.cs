@@ -116,7 +116,7 @@ namespace Flux.Model.Sprites {
         /// Initializes a new empty instance of the <see cref="Sprite"/> class.
         /// </summary>
         /// <param name="fluxGame">The flux game.</param>
-        public Sprite ( FluxGame fluxGame ) {
+        protected Sprite ( FluxGame fluxGame ) {
             this.Flux = fluxGame;
             this.Visible = true;
         }
@@ -126,7 +126,7 @@ namespace Flux.Model.Sprites {
         /// </summary>
         /// <param name="fluxGame">The flux game.</param>
         /// <param name="size">The size.</param>
-        public Sprite ( FluxGame fluxGame, Vector2 size ) {
+        protected Sprite ( FluxGame fluxGame, Vector2 size ) {
             this.Flux = fluxGame;
             this.Size = size;
 
@@ -140,7 +140,7 @@ namespace Flux.Model.Sprites {
         /// <param name="fluxGame">The flux game.</param>
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        public Sprite ( FluxGame fluxGame, Vector2 size, Vector2 position ) {
+        protected Sprite ( FluxGame fluxGame, Vector2 size, Vector2 position ) {
             this.Flux = fluxGame;
             this.Size = size;
             this.Position = position;
@@ -201,10 +201,7 @@ namespace Flux.Model.Sprites {
         public bool IsInBounds ( float x, float y ) {
             Rectangle tangle = VectorUtils.VectorsToRectangle( Position, Size );
 
-            if ( tangle.IsEmpty )
-                return false;
-
-            return tangle.Contains( (int) x, (int) y );
+            return !tangle.IsEmpty && tangle.Contains( (int) x, (int) y );
         }
 
         #endregion

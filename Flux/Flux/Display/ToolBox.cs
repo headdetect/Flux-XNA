@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using Flux.Model.Sprites.Shapes;
+using Flux.Model.Sprites.Tools;
 using Microsoft.Xna.Framework.Input;
 using Flux.Managers;
 using Microsoft.Xna.Framework;
@@ -17,7 +18,6 @@ namespace Flux.Display {
         readonly Vector2 Size = new Vector2( 400, 70 );
         readonly Vector2 screenSize;
         readonly Vector2 toolPos;
-
 
         /// <summary>
         /// Gets or sets the tools.
@@ -84,34 +84,44 @@ namespace Flux.Display {
             }
         }
 
+
+        private MouseState lastState;
+
         //Overriden
         public void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
             MouseState state = Mouse.GetState();
             Slot slot = GetSlot( state );
 
 
-            if ( slot != null ) {
 
-                SelectedSlot = slot;
-                slot.IsHoveredOver = true;
+            if ( slot != null && slot.Count > 0 ) {
 
-                if ( state.LeftButton == ButtonState.Pressed ) {
-
-                    //shouldn't be not null (wat)
-                    if ( SelectedSlot.Block == null ) {
-                        Block block = GetBlock( SelectedSlot.Tool.BlockForm );
-                        ActiveBlocks.Add( block );
-                        SelectedSlot.Block = block;
-                        block.HasMoveSettingActivated = true;
-                        block.Body.Position = ConvertUnits.ToSimUnits( new Vector2( game.HUD.Width / 2, game.HUD.Height / 2 ) );
-
-                        game.SpriteManager.Add( block );
-                        slot.Count--;
+                if ( lastState.LeftButton == ButtonState.Released && state.LeftButton == ButtonState.Pressed ) {
+                    for ( int i = 0; i < Slots.Length; i++ ) {
+                        Slots[i].IsHoveredOver = false;
                     }
+
+                    slot.IsHoveredOver = true;
+                    SelectedSlot = slot;
                 }
 
             }
 
+
+            if ( lastState.LeftButton == ButtonState.Released && state.LeftButton == ButtonState.Pressed ) {
+                if ( slot == null && SelectedSlot != null && SelectedSlot.Count > 0 ) {
+                    //shouldn't be not null (wat)
+                    Block block = GetBlock ( SelectedSlot.Tool.BlockForm, state.X, state.Y );
+                    ActiveBlocks.Add ( block );
+                    SelectedSlot.Block = block;
+                    block.HasMoveSettingActivated = true;
+
+                    game.SpriteManager.Add ( block );
+                    SelectedSlot.Count--;
+                }
+            }
+
+            lastState = state;
         }
 
         const int PAD = 11;
@@ -125,11 +135,15 @@ namespace Flux.Display {
 
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
-                game.SpriteBatch.Draw( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, slot.Tool.Position, null, Color.White, 0f, Vector2.Zero, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
-                if ( slot.Count > 1 )
-                    game.SpriteBatch.DrawString( game.TextureManager.ToolBoxFont, slot.Count.ToString(), slot.Tool.Position - new Vector2( 0, 10 ), Color.White );
+                if ( slot.Count > 0 ) {
+                    game.SpriteBatch.Draw( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, slot.Tool.Position, null, Color.White, 0f, Vector2.Zero, 1f,
+                                            Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
+                    if ( slot.Count > 1 )
+                        game.SpriteBatch.DrawString( game.TextureManager.ToolBoxFont, slot.Count.ToString( CultureInfo.InvariantCulture ),
+                                                      slot.Tool.Position - new Vector2( 0, 10 ), Color.White );
+                }
 
             }
 
@@ -140,8 +154,6 @@ namespace Flux.Display {
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
 
-                slot.IsHoveredOver = false;
-
                 if ( slot.Tool.IsInBounds( state.X, state.Y ) ) {
                     return slot;
                 }
@@ -149,12 +161,12 @@ namespace Flux.Display {
             return null;
         }
 
-        internal Block GetBlock ( Type type ) {
+        internal Block GetBlock ( Type type, float x, float y ) {
             if ( type.BaseType != typeof( Block ) ) {
                 throw new ArgumentException( "Specified type is not a block" );
             }
 
-            Block block = (Block) Activator.CreateInstance( type, game );
+            Block block = (Block) Activator.CreateInstance( type, game, new Vector2( x, y ) );
 
             if ( block == null ) {
                 throw new NullReferenceException( "Type does not contain a valid block" );

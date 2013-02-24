@@ -20,6 +20,7 @@ namespace Flux.Utils {
         /// </summary>
         /// <param name="n">The number of sides.</param>
         /// <param name="r">The radius size.</param>
+        /// <param name="convertUnits">Convert units to physics sim units</param>
         /// <returns>An array of Vector2s</returns>
         public static Vertices CreatePolygon ( int n, float r, bool convertUnits = true ) {
             if ( n < 2 ) {

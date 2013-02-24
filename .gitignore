@@ -7,3 +7,4 @@ TestResults
 *.suo
 *.csproj.Debug.cachefile
 *.cachefile
+_ReSharper.Flux

@@ -67,7 +67,7 @@ namespace Flux.Model.Sprites {
         }
 
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            if ( HoverBounds != null && !HoverBounds.IsEmpty ) {
+            if ( !HoverBounds.IsEmpty ) {
                 Position = HoverBounds.Location.ToVector ();
                 Size = new Vector2 ( HoverBounds.Width, HoverBounds.Height );
             }

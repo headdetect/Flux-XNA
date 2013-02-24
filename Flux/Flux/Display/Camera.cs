@@ -118,9 +118,7 @@ namespace Flux.Display {
             get { return currentRotation; }
             set {
                 targetRot = value % (float) Math.PI * 2f;
-                if ( _minRotation != _maxRotation ) {
-                    targetRot = MathHelper.Clamp( targetRot, _minRotation, _maxRotation );
-                }
+                targetRot = MathHelper.Clamp( targetRot, _minRotation, _maxRotation );
             }
         }
 
@@ -188,9 +186,7 @@ namespace Flux.Display {
         /// <param name="amount">The amount.</param>
         public void RotateCamera ( float amount ) {
             currentRotation += amount;
-            if ( _minRotation != _maxRotation ) {
-                currentRotation = MathHelper.Clamp( currentRotation, _minRotation, _maxRotation );
-            }
+            currentRotation = MathHelper.Clamp( currentRotation, _minRotation, _maxRotation );
             targetRot = currentRotation;
             spriteTracking = false;
         }
