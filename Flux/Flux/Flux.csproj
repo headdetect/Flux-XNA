@@ -127,6 +127,7 @@
     <Compile Include="Display\Screen Componenets\SpeedComponent.cs" />
     <Compile Include="Display\ToolBox.cs" />
     <Compile Include="Entities\Sprites\Blocks\Block.cs" />
+    <Compile Include="Entities\Sprites\Prefabs.cs" />
     <Compile Include="Entities\Sprites\Tools\Tool.cs" />
     <Compile Include="Managers\Settings.cs" />
     <Compile Include="Managers\ContentManager.cs" />

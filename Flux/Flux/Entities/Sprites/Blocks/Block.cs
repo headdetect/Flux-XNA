@@ -15,6 +15,7 @@ namespace Flux.Entities.Sprites.Blocks {
         private bool _rotActivated;
         private bool _moveActivated;
 
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance has the rotation setting activated.
         /// </summary>
@@ -48,12 +49,7 @@ namespace Flux.Entities.Sprites.Blocks {
                 _moveActivated = value;
                 IsPlaced = !value;
 
-                if ( value ) {
-                    //Flux.SpriteManager.MoveOverlay.SetBoundsWithBody( Body, Size );
-                }
-                else {
-                    //Flux.SpriteManager.MoveOverlay.SetBoundsWithBody( null, Vector2.Zero );
-                }
+                //Prefabs.MoveOverlaySprite.SetBoundsWithBody ( value ? Body : null );
             }
         }
 
@@ -70,13 +66,14 @@ namespace Flux.Entities.Sprites.Blocks {
         /// <summary>
         /// Called when a collision is made
         /// </summary>
-        /// <param name="collidingFixture">The colliding fixture.</param>
+        /// <param name="other">The other fixture.</param>
+        /// <param name="thisFixture">This sprite's fixture.</param>
         /// <param name="contact">The contact.</param>
-        public virtual bool OnCollision ( Fixture collidingFixture, Contact contact ) {
-            if ( !IsPlaced )
-                return false;
-
-            //Do some collision stuff
+        /// <returns>true generally.</returns>
+        public virtual bool OnCollision ( Fixture other, Fixture thisFixture, Contact contact ) {
+            if ( IsPlaced ) {
+                thisFixture.IgnoreCollisionWith ( other );
+            } 
 
             return true;
         }
@@ -91,9 +88,8 @@ namespace Flux.Entities.Sprites.Blocks {
                     if ( !HasMoveSettingActivated ) {
                         HasMoveSettingActivated = true;
                     }
-                    else {
-                        hasHold = true;
-                    }
+                    hasHold = true;
+
                 }
             }
             else if ( state.LeftButton == ButtonState.Released ) {
@@ -105,7 +101,7 @@ namespace Flux.Entities.Sprites.Blocks {
                 // Conversion from display to sim will be undone by setting the Position.
                 // /r/explainlikeimfive/
                 // Position converts to sim, we must convert to display so it unconverts. Mess it up, so Position will revert it.
-                Position = ConvertUnits.ToDisplayUnits( Game.Camera.ConvertScreenLocationToWorldLocation( new Vector2( state.X, state.Y ) + Size / 2f ) );
+                Position = ConvertUnits.ToDisplayUnits( Game.Camera.ConvertScreenLocationToWorldLocation( new Vector2( state.X, state.Y ) ) );
             }
 
             lastState = state;
@@ -128,6 +124,32 @@ namespace Flux.Entities.Sprites.Blocks {
         /// <param name="game">The game.</param>
         protected Block ( BaseFluxGame game ) : base( game ) { }
 
+        /// <summary>
+        /// Gets or sets the body.
+        /// </summary>
+        /// <value>
+        /// The body.
+        /// </value>
+        public new Body Body {
+            get { return base.Body; }
+            set {
+                base.Body = value;
+                base.Body.OnCollision += ( a, b, z ) => {
+
+                    Fixture other = a;
+
+                    if ( a.Body == base.Body )
+                        other = b;
+
+                    else if ( b.Body == base.Body )
+                        other = a;
+
+                    else return false;
+
+                    return OnCollision( other, b, z );
+                };
+            }
+        }
 
     }
 }

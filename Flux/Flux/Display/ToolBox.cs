@@ -110,14 +110,22 @@ namespace Flux.Display {
             if ( lastState.LeftButton == ButtonState.Released && state.LeftButton == ButtonState.Pressed ) {
                 if ( slot == null && SelectedSlot != null && SelectedSlot.Count > 0 ) {
                     Block block = GetBlock( SelectedSlot.Tool.BlockForm, state.X, state.Y );
-                    ActiveBlocks.Add ( block );
+                    ActiveBlocks.Add( block );
+
+                    for ( int i = 0; i < ActiveBlocks.Count; i++ ) {
+                        if ( block != ActiveBlocks[ i ] ) {
+                            ActiveBlocks[ i ].HasMoveSettingActivated = false;
+                            ActiveBlocks[ i ].HasRotationSettingActivated = false;
+                        }
+                    }
+
                     block.HasMoveSettingActivated = true;
 
                     SelectedSlot.Count--;
                     SelectedSlot.Block = block;
                     SelectedSlot.IsHoveredOver = false;
                     SelectedSlot = null;
-                    
+
                     game.SpriteManager.Add( block );
 
                 }

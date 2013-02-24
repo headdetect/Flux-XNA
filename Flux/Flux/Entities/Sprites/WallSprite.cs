@@ -14,10 +14,11 @@ namespace Flux.Entities.Sprites {
         public WallSprite ( FluxGame fluxGame, Vector2 position, float width, float height )
             : base( fluxGame, new Vector2( width, height ), position ) {
 
-            this.Body = BodyFactory.CreateRectangle( Game.PhysicsWorld, ConvertUnits.ToSimUnits( Size.X ), ConvertUnits.ToSimUnits( Size.Y ), 1f, ConvertUnits.ToSimUnits( position ) );
+            Body = BodyFactory.CreateRectangle( Game.PhysicsWorld, ConvertUnits.ToSimUnits( Size.X ), ConvertUnits.ToSimUnits( Size.Y ), 1f, ConvertUnits.ToSimUnits( position ) );
 
             Origin = new Vector2( width / 2f, height / 2f );
         }
+
 
 
         public override void Init () {

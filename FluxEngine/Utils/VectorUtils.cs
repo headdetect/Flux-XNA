@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FarseerPhysics;
+using FarseerPhysics.Collision;
+using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
+using FarseerPhysics.Common.Decomposition;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace FluxEngine.Utils {
     public static class VectorUtils {
@@ -17,6 +21,37 @@ namespace FluxEngine.Utils {
         /// <returns></returns>
         public static Rectangle VectorsToRectangle ( Vector2 start, Vector2 end ) {
             return new Rectangle( Convert.ToInt32( start.X ), Convert.ToInt32( start.Y ), Convert.ToInt32( end.X ), Convert.ToInt32( end.Y ) );
+        }
+
+        /// <summary>
+        /// Gets the size from shape.
+        /// </summary>
+        /// <param name="shape">The shape.</param>
+        /// <returns></returns>
+        public static Vector2 GetSizeFromShape ( Shape shape ) {
+            switch ( shape.ShapeType ) {
+                case ShapeType.Circle:
+                    return new Vector2( shape.Radius );
+                case ShapeType.Polygon:
+                    return GetSizeFromVertices( ( (PolygonShape) shape ).Vertices );
+                default:
+                    return Vector2.Zero;
+            }
+        }
+
+        /// <summary>
+        /// Gets the size from vertices.
+        /// </summary>
+        /// <param name="vertices">The vertices.</param>
+        /// <returns></returns>
+        public static Vector2 GetSizeFromVertices ( Vertices vertices ) {
+            Vertices verts = new Vertices( vertices );
+            Vector2 scale = ConvertUnits.ToDisplayUnits( Vector2.One );
+            verts.Scale( ref scale );
+            AABB vertsBounds = verts.GetCollisionBox();
+            verts.Translate( -vertsBounds.Center );
+            return new Vector2( vertsBounds.UpperBound.X - vertsBounds.LowerBound.X,
+                                            vertsBounds.UpperBound.Y - vertsBounds.LowerBound.Y );
         }
 
 
@@ -42,12 +77,28 @@ namespace FluxEngine.Utils {
             return new Point( (int) vector.X, (int) vector.Y );
         }
 
-        public static Vertices AddVertices ( Vertices vertices, Vector2 position ) {
+        /// <summary>
+        /// Adds the vertices.
+        /// </summary>
+        /// <param name="vertices">The vertices.</param>
+        /// <param name="position">The position.</param>
+        /// <returns>the combined vertices</returns>
+        public static Vertices AddVectorToVertices ( Vertices vertices, Vector2 position ) {
             Vertices verts = new Vertices( vertices.Count );
             for ( int i = 0; i < vertices.Count; i++ ) {
-                verts.Add( vertices[ i ] + ConvertUnits.ToSimUnits(position) );
+                verts.Add( vertices[ i ] + ConvertUnits.ToSimUnits( position ) );
             }
             return verts;
+        }
+
+        /// <summary>
+        /// Adds the rectangles.
+        /// </summary>
+        /// <param name="rectOne">The rect one.</param>
+        /// <param name="rectTwo">The rect two.</param>
+        /// <returns>the combined rectangle</returns>
+        public static Rectangle AddRectanglesAsPadding ( Rectangle rectOne, Rectangle rectTwo ) {
+            return new Rectangle( rectOne.X - rectTwo.X, rectOne.Y - rectTwo.Y, rectOne.Width + rectTwo.Width, rectOne.Height + rectTwo.Height );
         }
     }
 }

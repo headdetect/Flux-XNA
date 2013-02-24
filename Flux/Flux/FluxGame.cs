@@ -132,6 +132,8 @@ namespace Flux {
 
             HUD.Initialize();
 
+            Prefabs.CreatePrefabs( this );
+
             SetupDebug();
         }
 

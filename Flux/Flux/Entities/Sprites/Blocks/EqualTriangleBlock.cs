@@ -61,6 +61,7 @@ namespace Flux.Entities.Sprites.Blocks {
 
         public override void Init () {
             Texture = ContentManager.TriangleTexture;
+            Size = new Vector2( Texture.Width, Texture.Height );
         }
 
 

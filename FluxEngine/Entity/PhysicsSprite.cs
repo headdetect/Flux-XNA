@@ -69,14 +69,11 @@ namespace FluxEngine.Entity {
         /// <param name="game">The game.</param>
         protected PhysicsSprite ( BaseFluxGame game ) : this( game, Vector2.Zero, Vector2.Zero ) { }
 
-
         /// <summary>
         /// Updates this instance.
         /// </summary>
         /// <param name="gameTime"></param>
-        public override void Update ( GameTime gameTime ) {
-
-        }
+        public override void Update ( GameTime gameTime ) { }
 
         /// <summary>
         /// Determines whether the points are in the bounds of the sprite
