@@ -1,29 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using FarseerPhysics;
 using FarseerPhysics.DebugViews;
+using Flux.Entities;
+using Flux.Entities.Sprites;
+using FluxEngine;
+using FluxEngine.Display;
+using FluxEngine.Managers;
+using FluxEngine.Utils;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Flux.Model.Sprites;
-using Flux.Managers;
 using System.Reflection;
 using FarseerPhysics.Dynamics;
 using Flux.Display;
-using Flux.Model;
-using Flux.Utils;
 using System.Diagnostics;
 
 namespace Flux {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class FluxGame : Microsoft.Xna.Framework.Game {
+    public class FluxGame : BaseFluxGame {
 
         /// <summary>
         /// Gets the version.
@@ -33,19 +29,15 @@ namespace Flux {
                 return Assembly.GetAssembly( typeof( FluxGame ) ).GetName().Version;
             }
         }
-        public GraphicsDeviceManager Graphics;
-        public SpriteBatch SpriteBatch;
+
         public Flux.Managers.ContentManager TextureManager;
-        public SpriteManager SpriteManager;
 
         private DebugViewXNA _debugView;
 
         //-- Game Entities --//
 
         public Background Background;
-        public World PhysicsWorld;
-        public Camera Camera;
-        public HUD HUD;
+
         public Player Player;
         public ToolBox ToolBox;
 
@@ -93,6 +85,8 @@ namespace Flux {
 
             Camera = new Camera( this );
             HUD = new HUD( this );
+
+            HUD.HUDObjects.Add( new CursorComponent( this ) );
             HUD.HUDObjects.Add( new FPSComponent( this ) );
             HUD.HUDObjects.Add( new CursorLocationComponent( this ) );
 
@@ -110,13 +104,14 @@ namespace Flux {
         protected override void LoadContent () {
             SpriteBatch = new SpriteBatch( GraphicsDevice );
 
-            Background = new Model.Sprites.Background( this );
+            Background = new Background( this );
+
             Background.ChangeBackground( "BackgroundTextureOne" );
 
             TextureManager = new Managers.ContentManager( this );
-            SpriteManager = new SpriteManager( this );
+            SpriteManager = new SpriteManager();
+            SpriteManager.Add( Background );
 
-            
 
             /* Top Wall */
             //SpriteManager.Add( new WallSprite( this, new Vector2( 0, -HUD.Height / 2f ), HUD.Width, 30 ) );
@@ -187,20 +182,21 @@ namespace Flux {
 
             SpriteBatch.End();
 
-            DrawDebugData ();
+            DrawDebugData();
 
             base.Draw( gameTime );
         }
 
         #region DEBUG
 
-        private void SetupDebug() {
+        private void SetupDebug () {
             // create and configure the debug view
             _debugView = new DebugViewXNA( this, PhysicsWorld );
 
-            //_debugView.AppendFlags(DebugViewFlags.PerformanceGraph);
-            _debugView.AppendFlags(DebugViewFlags.CenterOfMass);
-            _debugView.AppendFlags(DebugViewFlags.Shape);
+            _debugView.AppendFlags( DebugViewFlags.PerformanceGraph );
+            _debugView.AppendFlags( DebugViewFlags.CenterOfMass );
+            _debugView.AppendFlags( DebugViewFlags.Shape );
+            _debugView.AppendFlags( DebugViewFlags.DebugPanel );
             //_debugView.AppendFlags(DebugViewFlags.AABB);
 
             _debugView.DefaultShapeColor = Color.White;
@@ -208,7 +204,7 @@ namespace Flux {
             _debugView.LoadContent( GraphicsDevice, Content );
         }
 
-        private void DrawDebugData() {
+        private void DrawDebugData () {
             Matrix proj = Matrix.CreateOrthographicOffCenter( 0f, HUD.Width, HUD.Height, 0f, 0f, 1f );
             Matrix view2 = Matrix.CreateScale( 64 );
             view2 *= Camera.View;

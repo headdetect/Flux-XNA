@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using Flux.Model.Sprites.Tools;
-using Microsoft.Xna.Framework.Input;
+using Flux.Entities.Sprites.Blocks;
+using Flux.Entities.Sprites.Tools;
 using Flux.Managers;
+using FluxEngine.Display;
+using FluxEngine.Entity;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using Flux.Utils;
-using Flux.Model.Sprites.Blocks;
-using FarseerPhysics;
 
 namespace Flux.Display {
     public class ToolBox : IHUDComponent {
@@ -71,7 +69,9 @@ namespace Flux.Display {
         }
 
         //Overriden
-        public void Init () {
+        public override void Init () {
+            ZIndex = 1;
+
             for ( int i = 0; i < 6; i++ ) {
                 Slots[ i ] = new Slot( new EqualTriangleTool( game ), 4 );
                 Slots[ i ].Tool.Init();
@@ -88,21 +88,20 @@ namespace Flux.Display {
         private MouseState lastState;
 
         //Overriden
-        public void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
+        public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
             MouseState state = Mouse.GetState();
             Slot slot = GetSlot( state );
-
-
 
             if ( slot != null && slot.Count > 0 ) {
 
                 if ( lastState.LeftButton == ButtonState.Released && state.LeftButton == ButtonState.Pressed ) {
                     for ( int i = 0; i < Slots.Length; i++ ) {
-                        Slots[i].IsHoveredOver = false;
+                        if ( Slots[ i ] != slot )
+                            Slots[ i ].IsHoveredOver = false;
                     }
 
-                    slot.IsHoveredOver = true;
-                    SelectedSlot = slot;
+                    slot.IsHoveredOver = !slot.IsHoveredOver;
+                    SelectedSlot = slot.IsHoveredOver ? slot : null;
                 }
 
             }
@@ -110,14 +109,17 @@ namespace Flux.Display {
 
             if ( lastState.LeftButton == ButtonState.Released && state.LeftButton == ButtonState.Pressed ) {
                 if ( slot == null && SelectedSlot != null && SelectedSlot.Count > 0 ) {
-                    //shouldn't be not null (wat)
-                    Block block = GetBlock ( SelectedSlot.Tool.BlockForm, state.X, state.Y );
+                    Block block = GetBlock( SelectedSlot.Tool.BlockForm, state.X, state.Y );
                     ActiveBlocks.Add ( block );
-                    SelectedSlot.Block = block;
                     block.HasMoveSettingActivated = true;
 
-                    game.SpriteManager.Add ( block );
                     SelectedSlot.Count--;
+                    SelectedSlot.Block = block;
+                    SelectedSlot.IsHoveredOver = false;
+                    SelectedSlot = null;
+                    
+                    game.SpriteManager.Add( block );
+
                 }
             }
 
@@ -127,10 +129,10 @@ namespace Flux.Display {
         const int PAD = 11;
 
         //Overriden
-        public void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
+        public override void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
             game.SpriteBatch.Begin();
 
-            game.SpriteBatch.Draw( game.TextureManager.ToolBoxTexture, toolPos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
+            game.SpriteBatch.Draw( ContentManager.ToolBoxTexture, toolPos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
 
             for ( int i = 0; i < 6; i++ ) {
@@ -141,7 +143,7 @@ namespace Flux.Display {
                                             Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
                     if ( slot.Count > 1 )
-                        game.SpriteBatch.DrawString( game.TextureManager.ToolBoxFont, slot.Count.ToString( CultureInfo.InvariantCulture ),
+                        game.SpriteBatch.DrawString( ContentManager.ToolBoxFont, slot.Count.ToString( CultureInfo.InvariantCulture ),
                                                       slot.Tool.Position - new Vector2( 0, 10 ), Color.White );
                 }
 

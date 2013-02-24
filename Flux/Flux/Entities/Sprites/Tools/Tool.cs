@@ -1,8 +1,10 @@
 ﻿using System;
+using FluxEngine;
+using FluxEngine.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Flux.Model.Sprites.Tools {
+namespace Flux.Entities.Sprites.Tools {
     public abstract class Tool : Sprite {
 
         /// <summary>
@@ -11,20 +13,20 @@ namespace Flux.Model.Sprites.Tools {
         /// <param name="game">The game.</param>
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        protected Tool ( FluxGame game, Vector2 size, Vector2 position ) : base( game, size, position ) { }
+        protected Tool ( BaseFluxGame game, Vector2 size, Vector2 position ) : base( game, size, position ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="size">The size.</param>
-        protected Tool ( FluxGame game, Vector2 size ) : base( game, size ) { }
+        protected Tool ( BaseFluxGame game, Vector2 size ) : base( game, size ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        protected Tool ( FluxGame game ) : base( game ) { }
+        protected Tool ( BaseFluxGame game ) : base( game ) { }
 
         /// <summary>
         /// Gets or sets the name of the shape.
@@ -33,6 +35,9 @@ namespace Flux.Model.Sprites.Tools {
         /// The name.
         /// </value>
         public abstract string Name { get; }
+
+        public override Vector2 Position { get; set; }
+        public override float Rotation { get; set; }
 
         /// <summary>
         /// Gets the texture of the tool when it is being hovered over

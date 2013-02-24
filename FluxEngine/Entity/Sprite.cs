@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FluxEngine.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Flux.Managers;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Collision.Shapes;
-using Flux.Utils;
 
-namespace Flux.Model.Sprites {
+namespace FluxEngine.Entity {
 
 
-    public abstract class Sprite {
+    public abstract class Sprite : IComparable {
 
         /// <summary>
         /// Gets the flux game.
         /// </summary>
-        internal FluxGame Flux { get; private set; }
+        protected BaseFluxGame Game { get; private set; }
 
 
         /// <summary>
@@ -43,7 +37,7 @@ namespace Flux.Model.Sprites {
         /// <value>
         /// The position.
         /// </value>
-        public Vector2 Position { get; set; }
+        public abstract Vector2 Position { get; set; }
 
         /// <summary>
         /// Gets or sets the size.
@@ -78,13 +72,7 @@ namespace Flux.Model.Sprites {
         /// <value>
         /// The rotation.
         /// </value>
-        public float Rotation {
-            get { return _rot; }
-            set {
-                _rot = value % 360;
-            }
-        }
-        private float _rot;
+        public abstract float Rotation { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the Z vert.
@@ -116,8 +104,8 @@ namespace Flux.Model.Sprites {
         /// Initializes a new empty instance of the <see cref="Sprite"/> class.
         /// </summary>
         /// <param name="fluxGame">The flux game.</param>
-        protected Sprite ( FluxGame fluxGame ) {
-            this.Flux = fluxGame;
+        protected Sprite ( BaseFluxGame fluxGame ) {
+            this.Game = fluxGame;
             this.Visible = true;
         }
 
@@ -126,11 +114,9 @@ namespace Flux.Model.Sprites {
         /// </summary>
         /// <param name="fluxGame">The flux game.</param>
         /// <param name="size">The size.</param>
-        protected Sprite ( FluxGame fluxGame, Vector2 size ) {
-            this.Flux = fluxGame;
+        protected Sprite ( BaseFluxGame fluxGame, Vector2 size ) {
+            this.Game = fluxGame;
             this.Size = size;
-
-            this.Origin = new Vector2( size.X, size.Y ) / 2f;
             this.Visible = true;
         }
 
@@ -140,12 +126,10 @@ namespace Flux.Model.Sprites {
         /// <param name="fluxGame">The flux game.</param>
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
-        protected Sprite ( FluxGame fluxGame, Vector2 size, Vector2 position ) {
-            this.Flux = fluxGame;
+        protected Sprite ( BaseFluxGame fluxGame, Vector2 size, Vector2 position ) {
+            this.Game = fluxGame;
             this.Size = size;
             this.Position = position;
-
-            this.Origin = new Vector2( size.X, size.Y ) / 2f;
             this.Visible = true;
         }
 
@@ -156,7 +140,7 @@ namespace Flux.Model.Sprites {
         /// </summary>
         public virtual void Draw ( GameTime gameTime ) {
             if ( Visible )
-                Flux.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
+                Game.SpriteBatch.Draw( Texture, Position, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, ZoomScale, SpriteEffect, ZIndex );
         }
 
 
@@ -200,12 +184,15 @@ namespace Flux.Model.Sprites {
         /// </returns>
         public bool IsInBounds ( float x, float y ) {
             Rectangle tangle = VectorUtils.VectorsToRectangle( Position, Size );
-
             return !tangle.IsEmpty && tangle.Contains( (int) x, (int) y );
         }
 
         #endregion
 
+        public int CompareTo ( object obj ) {
+            Sprite other = (Sprite) obj;
+            return other.ZIndex.CompareTo ( ZIndex );
+        }
     }
 
 }

@@ -1,12 +1,10 @@
 ﻿using System;
-using FarseerPhysics.Dynamics;
+using FluxEngine.Entity;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics;
-using Flux.Model.Sprites;
 using Microsoft.Xna.Framework.Input;
 
-namespace Flux.Display {
+namespace FluxEngine.Display {
 
     public class Camera {
 
@@ -19,7 +17,7 @@ namespace Flux.Display {
 
         #endregion
 
-        static FluxGame game;
+        BaseFluxGame game;
 
         Vector2 _minPosition;
         Vector2 _maxPosition;
@@ -43,9 +41,8 @@ namespace Flux.Display {
         /// <summary>
         /// The constructor for the Camera2D class.
         /// </summary>
-        /// <param name="graphics"></param>
-        public Camera ( FluxGame game ) {
-            Camera.game = game;
+        public Camera ( BaseFluxGame game ) {
+            this.game = game;
             projection = Matrix.CreateOrthographicOffCenter( 0f, ConvertUnits.ToSimUnits( game.GraphicsDevice.Viewport.Width ),
                                                              ConvertUnits.ToSimUnits( game.GraphicsDevice.Viewport.Height ), 0f, 0f,
                                                              1f );

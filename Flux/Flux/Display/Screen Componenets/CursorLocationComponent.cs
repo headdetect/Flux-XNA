@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using FarseerPhysics;
+using Flux.Managers;
+using FluxEngine.Display;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -25,28 +27,28 @@ namespace Flux.Display {
 
         }
 
-        public void Update ( GameTime gameTime ) {
-            state = Mouse.GetState ();
+        public override void Update ( GameTime gameTime ) {
+            state = Mouse.GetState();
         }
 
-        public void Draw ( GameTime gameTime ) {
+        public override void Draw ( GameTime gameTime ) {
 
-            string fps = string.Format("X= {0} ({2})\nY= {1} ({3})", state.X, state.Y, ConvertUnits.ToSimUnits(state.X), ConvertUnits.ToSimUnits(state.Y) );
+            string fps = string.Format( "X= {0} (SIM={2}) \nY= {1} (SIM={3})\nCameraSim={4}", state.X, state.Y, ConvertUnits.ToSimUnits( state.X ), ConvertUnits.ToSimUnits( state.Y ), _game.Camera.ConvertScreenLocationToWorldLocation( new Vector2( state.X, state.Y ) ) );
 
             _game.SpriteBatch.Begin();
 
             /* Shadow */
-            _game.SpriteBatch.DrawString( _game.TextureManager.FPSFont, fps, _position + Vector2.One, Color.Black );
+            _game.SpriteBatch.DrawString( ContentManager.FPSFont, fps, _position + Vector2.One, Color.Black );
 
             /* Forground */
-            _game.SpriteBatch.DrawString( _game.TextureManager.FPSFont, fps, _position, Color.White );
+            _game.SpriteBatch.DrawString( ContentManager.FPSFont, fps, _position, Color.White );
 
 
             _game.SpriteBatch.End();
         }
 
 
-        public void Init () {
+        public override void Init () {
         }
     }
 }

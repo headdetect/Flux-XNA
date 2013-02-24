@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Flux.Managers;
+using FluxEngine.Entity;
+using FluxEngine.Utils;
 using Microsoft.Xna.Framework;
-using Flux.Utils;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics;
 
-namespace Flux.Model.Sprites {
+namespace Flux.Entities.Sprites {
     public class MoveOverlaySprite : Sprite {
+
+
 
         #region Constuctors
         /// <summary>
@@ -37,6 +38,8 @@ namespace Flux.Model.Sprites {
 
         #endregion
 
+        public override Vector2 Position { get; set; }
+        public override float Rotation { get; set; }
 
         /// <summary>
         /// Gets or sets the hover bounds.
@@ -45,6 +48,8 @@ namespace Flux.Model.Sprites {
         /// The hover bounds.
         /// </value>
         public Rectangle HoverBounds { get; set; }
+
+
 
         /// <summary>
         /// Sets the bounds with a sprite.
@@ -71,12 +76,12 @@ namespace Flux.Model.Sprites {
         }
 
         public override void Init () {
-            Texture = Flux.TextureManager.MoveOverlay;
+            Texture = ContentManager.MoveOverlay;
         }
 
         public override void Draw ( GameTime gameTime ) {
             if ( Visible )
-                Flux.SpriteBatch.Draw ( Texture, HoverBounds, null, Color.White, Convert.ToSingle ( Rotation * ( Math.PI / 180 ) ), Origin, SpriteEffect, ZIndex );
+                Game.SpriteBatch.Draw ( Texture, HoverBounds, null, Color.White, Convert.ToSingle ( Rotation * ( Math.PI / 180 ) ), Origin, SpriteEffect, ZIndex );
         }
 
         public override void Destroy ( bool animation ) {

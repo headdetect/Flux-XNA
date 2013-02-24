@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Globalization;
+using Flux.Managers;
+using FluxEngine.Display;
 using Microsoft.Xna.Framework;
 
 namespace Flux.Display {
@@ -29,7 +31,7 @@ namespace Flux.Display {
 
         }
 
-        public void Update ( GameTime gameTime ) {
+        public override void Update ( GameTime gameTime ) {
             _elapsedTime += gameTime.ElapsedGameTime;
 
             if ( _elapsedTime <= TimeSpan.FromSeconds( 1 ) ) return;
@@ -39,7 +41,7 @@ namespace Flux.Display {
             _frameCounter = 0;
         }
 
-        public void Draw ( GameTime gameTime ) {
+        public override void Draw ( GameTime gameTime ) {
             _frameCounter++;
 
             string fps = string.Format( _format, "{0} FPS", _frameRate );
@@ -47,17 +49,17 @@ namespace Flux.Display {
             _game.SpriteBatch.Begin();
 
             /* Shadow */
-            _game.SpriteBatch.DrawString( _game.TextureManager.FPSFont, fps,_position + Vector2.One, Color.Black );
+            _game.SpriteBatch.DrawString( ContentManager.FPSFont, fps, _position + Vector2.One, Color.Black );
 
             /* Forground */
-            _game.SpriteBatch.DrawString( _game.TextureManager.FPSFont, fps,_position, Color.White );
+            _game.SpriteBatch.DrawString( ContentManager.FPSFont, fps, _position, Color.White );
 
 
             _game.SpriteBatch.End();
         }
 
 
-        public void Init () {
+        public override void Init () {
         }
     }
 }

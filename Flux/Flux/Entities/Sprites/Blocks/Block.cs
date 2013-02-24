@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FarseerPhysics.Common;
+﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using FluxEngine;
+using FluxEngine.Entity;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework.Input;
-using FarseerPhysics;
-using Flux.Utils;
 
-namespace Flux.Model.Sprites.Blocks {
+namespace Flux.Entities.Sprites.Blocks {
 
     /// <summary>
     /// Structure for making a block.
@@ -86,53 +82,51 @@ namespace Flux.Model.Sprites.Blocks {
         }
 
         private bool hasHold;
+        private MouseState lastState;
         public override void Update ( GameTime gameTime ) {
             MouseState state = Mouse.GetState();
 
-            switch ( state.LeftButton ) {
-                case ButtonState.Pressed :
-                    if ( IsInBounds( state.X, state.Y ) ) {
-                        if ( !HasMoveSettingActivated ) {
-                            HasMoveSettingActivated = true;
-                        }
-                        else {
-                            hasHold = true;
-                        }
+            if ( state.LeftButton == ButtonState.Pressed && lastState.LeftButton == ButtonState.Released ) {
+                if ( IsInBounds( state.X, state.Y ) ) {
+                    if ( !HasMoveSettingActivated ) {
+                        HasMoveSettingActivated = true;
                     }
-                    break;
-                case ButtonState.Released :
-                    hasHold = false;
-                    break;
+                    else {
+                        hasHold = true;
+                    }
+                }
+            }
+            else if ( state.LeftButton == ButtonState.Released ) {
+                hasHold = false;
             }
 
             if ( hasHold ) {
-                Position = new Vector2 ( state.X, state.Y ) + Size / 2f;
+
+                // Conversion from display to sim will be undone by setting the Position.
+                // /r/explainlikeimfive/
+                // Position converts to sim, we must convert to display so it unconverts. Mess it up, so Position will revert it.
+                Position = ConvertUnits.ToDisplayUnits( Game.Camera.ConvertScreenLocationToWorldLocation( new Vector2( state.X, state.Y ) + Size / 2f ) );
             }
+
+            lastState = state;
 
             base.Update( gameTime );
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="position">The position.</param>
-        /// <param name="size">The size</param>
-        protected Block ( FluxGame game, Vector2 position, Vector2 size ) : base( game, position, size ) { }
+        protected Block ( BaseFluxGame game, Vector2 position )
+            : base( game, position ) {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Block"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <param name="size">The size.</param>
-        protected Block ( FluxGame game, Vector2 size ) : base( game, size ) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Block"/> class.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        protected Block ( FluxGame game ) : base( game ) { }
+        protected Block ( BaseFluxGame game ) : base( game ) { }
 
 
     }

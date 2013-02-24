@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Flux.Model.Sprites;
+﻿using Flux.Entities.Sprites;
+using FluxEngine.Entity;
 using Microsoft.Xna.Framework;
-using Flux.Managers;
 using Flux.Display;
 
-namespace Flux.Model {
+namespace Flux.Entities {
     public class Player {
 
         /// <summary>
@@ -23,7 +19,7 @@ namespace Flux.Model {
         public Player ( FluxGame game ) {
             this.game = game;
 
-            Sprite = new BallSprite( game, new Vector2( game.HUD.Width / 4, game.HUD.Height / 4 ) );
+            Sprite = new BallSprite( game, new Vector2( game.HUD.Width / 4f, game.HUD.Height / 4f ) );
             game.HUD.HUDObjects.Add( new SpeedComponent( game ) );
             game.SpriteManager.Add(Sprite);
         }

@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Flux.Model.Sprites;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO;
 
-namespace Flux.Utils {
+namespace FluxEngine.Utils {
     public class TextureUtils {
 
         /// <summary>
@@ -17,7 +10,7 @@ namespace Flux.Utils {
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns></returns>
-        public static Texture2D CreateFromColor ( FluxGame game, Microsoft.Xna.Framework.Color color, int width, int height ) {
+        public static Texture2D CreateFromColor ( BaseFluxGame game, Microsoft.Xna.Framework.Color color, int width, int height ) {
             var texture = new Texture2D( game.GraphicsDevice, width, height, true, SurfaceFormat.Color );
 
             Microsoft.Xna.Framework.Color[] colors = new Microsoft.Xna.Framework.Color[ (int) ( width * height ) ];

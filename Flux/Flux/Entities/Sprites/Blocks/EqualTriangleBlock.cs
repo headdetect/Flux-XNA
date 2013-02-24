@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FarseerPhysics;
+﻿using FarseerPhysics;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
+using Flux.Managers;
+using FluxEngine.Entity;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
-using Flux.Utils;
-using Microsoft.Xna.Framework.Input;
 
-namespace Flux.Model.Sprites.Blocks {
+namespace Flux.Entities.Sprites.Blocks {
     public class EqualTriangleBlock : Block {
 
         private static readonly Vector2 DEFAULT_SIZE = new Vector2( 39, 35 );
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EqualTriangleBlock"/> class.
@@ -22,7 +19,7 @@ namespace Flux.Model.Sprites.Blocks {
         /// <param name="size">The size.</param>
         /// <param name="position">The position.</param>
         public EqualTriangleBlock ( FluxGame game, Vector2 size, Vector2 position )
-            : base( game ) {
+            : base( game, position ) {
 
             float width = ConvertUnits.ToSimUnits( size.X );
             float height = ConvertUnits.ToSimUnits( size.Y );
@@ -38,11 +35,10 @@ namespace Flux.Model.Sprites.Blocks {
             Vector2[] vertices = { new Vector2( centerX, top ), new Vector2( right, bottom ), new Vector2( left, bottom ) };
             Vertices = new Vertices( vertices );
 
-            Body = BodyFactory.CreatePolygon( game.PhysicsWorld, Vertices, 1f );
+            Body = BodyFactory.CreatePolygon( game.PhysicsWorld, Vertices, 1f, game.Camera.ConvertScreenLocationToWorldLocation( position ) );
             Body.BodyType = BodyType.Static;
 
-            this.Position = position;
-            this.Size = size;
+            Origin = size / 2f;
         }
 
         /// <summary>
@@ -64,7 +60,7 @@ namespace Flux.Model.Sprites.Blocks {
 
 
         public override void Init () {
-            Texture = Flux.TextureManager.TriangleTexture;
+            Texture = ContentManager.TriangleTexture;
         }
 
 

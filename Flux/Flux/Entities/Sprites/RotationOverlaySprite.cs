@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Flux.Managers;
+using FluxEngine.Entity;
+using FluxEngine.Utils;
 using Microsoft.Xna.Framework;
-using Flux.Utils;
 
-namespace Flux.Model.Sprites {
+namespace Flux.Entities.Sprites {
     public class RotationOverlaySprite : Sprite {
 
         #region Constuctors
@@ -35,6 +34,9 @@ namespace Flux.Model.Sprites {
 
         #endregion
 
+        public override Vector2 Position { get; set; }
+        public override float Rotation { get; set; }
+
         /// <summary>
         /// Gets or sets the hover bounds.
         /// </summary>
@@ -52,19 +54,19 @@ namespace Flux.Model.Sprites {
         }
 
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            if ( HoverBounds != null && !HoverBounds.IsEmpty ) {
+            if ( !HoverBounds.IsEmpty ) {
                 Position = HoverBounds.Location.ToVector();
                 Size = new Vector2( HoverBounds.Width, HoverBounds.Height );
             }
         }
 
         public override void Init () {
-            Texture = Flux.TextureManager.RotationOverlay;
+            Texture = ContentManager.RotationOverlay;
         }
 
         public override void Draw ( GameTime gameTime ) {
             if ( Visible )
-                Flux.SpriteBatch.Draw( Texture, HoverBounds, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, SpriteEffect, ZIndex );
+                Game.SpriteBatch.Draw( Texture, HoverBounds, null, Color.White, Convert.ToSingle( Rotation * ( Math.PI / 180 ) ), Origin, SpriteEffect, ZIndex );
         }
 
         public override void Destroy ( bool animation ) {

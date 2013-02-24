@@ -6,7 +6,7 @@ using FarseerPhysics;
 using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 
-namespace Flux.Utils {
+namespace FluxEngine.Utils {
     public static class VectorUtils {
 
         /// <summary>

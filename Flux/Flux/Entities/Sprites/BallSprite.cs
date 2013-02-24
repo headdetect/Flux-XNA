@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Flux.Managers;
+using FluxEngine.Entity;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
-using Microsoft.Xna.Framework.Audio;
-using Flux.Utils;
 using FarseerPhysics;
 
-namespace Flux.Model.Sprites {
+namespace Flux.Entities.Sprites {
 
     public class BallSprite : PhysicsSprite {
 
@@ -29,7 +24,7 @@ namespace Flux.Model.Sprites {
             : base ( fluxGame, DEFAULT_SIZE, spawnPos ) {
 
             this.spawnPos = spawnPos;
-            this.Body = BodyFactory.CreateCircle ( Flux.PhysicsWorld, ConvertUnits.ToSimUnits ( Size.X ), 1f, ConvertUnits.ToSimUnits ( Position ) );
+            this.Body = BodyFactory.CreateCircle( Game.PhysicsWorld, ConvertUnits.ToSimUnits( Size.X ), 1f, ConvertUnits.ToSimUnits( spawnPos ) );
             this.Body.CreateFixture ( new CircleShape ( ConvertUnits.ToSimUnits ( Size.X ), 2f ) );
             this.Body.FixtureList[ 0 ].Restitution = .2f;
             this.Body.BodyType = BodyType.Dynamic;
@@ -37,7 +32,7 @@ namespace Flux.Model.Sprites {
             this.Body.AngularDamping = 25f;
             this.Body.Friction = 25f;
 
-            this.Origin = Size;
+            Origin = Size;
             this.ZoomScale = Size.X / 25f;
         }
 
@@ -107,7 +102,7 @@ namespace Flux.Model.Sprites {
         }
 
         public override void Init () {
-            Texture = Flux.TextureManager.BallTexture;
+            Texture = ContentManager.BallTexture;
         }
 
         public override void Destroy ( bool animation ) {

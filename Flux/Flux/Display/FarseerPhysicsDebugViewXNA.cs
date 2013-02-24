@@ -347,7 +347,7 @@ namespace FarseerPhysics.DebugViews {
                              "\n- Controllers: " + World.ControllerList.Count +
                              "\n- Proxies: " + World.ProxyCount );
 
-            DrawString( x + 160, y, "Update time:" +
+            DrawString( x + 120, y, "Update time:" +
                                    "\n- Body: " + World.SolveUpdateTime +
                                    "\n- Contact: " + World.ContactsUpdateTime +
                                    "\n- CCD: " + World.ContinuousPhysicsTime +
@@ -726,7 +726,7 @@ namespace FarseerPhysics.DebugViews {
             _device = device;
             _batch = new SpriteBatch( _device );
             _primitiveBatch = new PrimitiveBatch( _device, 1000 );
-            _font = game.TextureManager.FPSFont;
+            _font = Flux.Managers.ContentManager.FPSFont;
             _stringData = new List<StringData>();
 
             _localProjection = Matrix.CreateOrthographicOffCenter( 0f, _device.Viewport.Width, _device.Viewport.Height,
