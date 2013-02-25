@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using FluxEngine.Managers;
 
 namespace FluxEngine.Display {
     public class HUD : DrawableGameComponent {
@@ -27,43 +28,49 @@ namespace FluxEngine.Display {
         /// </value>
         public List<IHUDComponent> HUDObjects { get; set; }
 
+        private BaseFluxGame fluxGame;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HUD"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
         public HUD ( BaseFluxGame game )
-            : base( game ) {
+            : base ( game ) {
 
-            HUDObjects = new List<IHUDComponent>();
+            fluxGame = game;
+
+            HUDObjects = new List<IHUDComponent> ();
 
             Height = game.GraphicsDevice.Viewport.Height;
             Width = game.GraphicsDevice.Viewport.Width;
         }
 
         public override void Initialize () {
+            HUDObjects.Add ( fluxGame.ViewManager = new ViewManager ( fluxGame ) );
+
             for ( int i = 0; i < HUDObjects.Count; i++ ) {
-                HUDObjects[ i ].Init();
+                HUDObjects[ i ].Init ();
             }
 
-            base.Initialize();
+            base.Initialize ();
         }
         public override void Update ( GameTime gameTime ) {
 
             for ( int i = 0; i < HUDObjects.Count; i++ ) {
-                HUDObjects[ i ].Update( gameTime );
+                HUDObjects[ i ].Update ( gameTime );
             }
 
-            base.Update( gameTime );
+            base.Update ( gameTime );
         }
 
         public override void Draw ( GameTime gameTime ) {
 
-            foreach ( var sprite in HUDObjects.OrderBy( x => x.ZIndex ) ) {
-                sprite.Draw( gameTime );
+            foreach ( var sprite in HUDObjects.OrderBy ( x => x.ZIndex ) ) {
+                sprite.Draw ( gameTime );
             }
 
-            base.Draw( gameTime );
+            base.Draw ( gameTime );
         }
 
     }

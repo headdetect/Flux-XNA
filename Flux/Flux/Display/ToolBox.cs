@@ -13,7 +13,7 @@ namespace Flux.Display {
     public class ToolBox : IHUDComponent {
 
         readonly FluxGame game;
-        readonly Vector2 Size = new Vector2( 400, 70 );
+        readonly Vector2 Size = new Vector2 ( 400, 70 );
         readonly Vector2 screenSize;
         readonly Vector2 toolPos;
 
@@ -50,7 +50,7 @@ namespace Flux.Display {
         /// </summary>
         /// <param name="game">The game.</param>
         public ToolBox ( FluxGame game )
-            : this( game, new Slot[ 6 ] ) {
+            : this ( game, new Slot[ 6 ] ) {
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace Flux.Display {
             this.game = game;
             this.Slots = slots;
 
-            this.screenSize = new Vector2( game.HUD.Width, game.HUD.Height );
-            this.toolPos = new Vector2( screenSize.X / 2, screenSize.Y - Size.Y / 2 );
+            this.screenSize = new Vector2 ( game.HUD.Width, game.HUD.Height );
+            this.toolPos = new Vector2 ( screenSize.X / 2, screenSize.Y - Size.Y / 2 );
 
-            this.ActiveBlocks = new List<Block>();
+            this.ActiveBlocks = new List<Block> ();
         }
 
         //Overriden
@@ -73,13 +73,13 @@ namespace Flux.Display {
             ZIndex = 1;
 
             for ( int i = 0; i < 6; i++ ) {
-                Slots[ i ] = new Slot( new EqualTriangleTool( game ), 4 );
-                Slots[ i ].Tool.Init();
+                Slots[ i ] = new Slot ( new EqualTriangleTool ( game ), 4 );
+                Slots[ i ].Tool.Init ();
 
                 float height = Slots[ i ].Tool.Size.Y;
                 float width = Slots[ i ].Tool.Size.X;
 
-                Slots[ i ].Tool.Position = toolPos - new Vector2( width * 4 + PAD + PAD / 2, 10 ) + new Vector2( i * ( PAD + width + PAD ), 0 );
+                Slots[ i ].Tool.Position = toolPos - new Vector2 ( width * 4 + PAD + PAD / 2, 10 ) + new Vector2 ( i * ( PAD + width + PAD ), 0 );
 
             }
         }
@@ -89,8 +89,8 @@ namespace Flux.Display {
 
         //Overriden
         public override void Update ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            MouseState state = Mouse.GetState();
-            Slot slot = GetSlot( state );
+            MouseState state = Mouse.GetState ();
+            Slot slot = GetSlot ( state );
 
             if ( slot != null && slot.Count > 0 ) {
 
@@ -109,8 +109,8 @@ namespace Flux.Display {
 
             if ( lastState.LeftButton == ButtonState.Released && state.LeftButton == ButtonState.Pressed ) {
                 if ( slot == null && SelectedSlot != null && SelectedSlot.Count > 0 ) {
-                    Block block = GetBlock( SelectedSlot.Tool.BlockForm, state.X, state.Y );
-                    ActiveBlocks.Add( block );
+                    Block block = GetBlock ( SelectedSlot.Tool.BlockForm, state.X, state.Y );
+                    ActiveBlocks.Add ( block );
 
                     for ( int i = 0; i < ActiveBlocks.Count; i++ ) {
                         if ( block != ActiveBlocks[ i ] ) {
@@ -126,7 +126,7 @@ namespace Flux.Display {
                     SelectedSlot.IsHoveredOver = false;
                     SelectedSlot = null;
 
-                    game.SpriteManager.Add( block );
+                    game.SpriteManager.Add ( block );
 
                 }
             }
@@ -138,33 +138,39 @@ namespace Flux.Display {
 
         //Overriden
         public override void Draw ( Microsoft.Xna.Framework.GameTime gameTime ) {
-            game.SpriteBatch.Begin();
+            game.SpriteBatch.Begin ();
 
-            game.SpriteBatch.Draw( ContentManager.ToolBoxTexture, toolPos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
+            game.SpriteBatch.Draw ( ContentManager.ToolBoxTexture, toolPos, null, Color.White, 0f, Size / 2, 1f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
 
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
 
+                if ( slot == null )
+                    continue;
+
                 if ( slot.Count > 0 ) {
-                    game.SpriteBatch.Draw( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, slot.Tool.Position, null, Color.White, 0f, Vector2.Zero, 1f,
+                    game.SpriteBatch.Draw ( slot.IsHoveredOver ? slot.Tool.TextureHovered : slot.Tool.Texture, slot.Tool.Position, null, Color.White, 0f, Vector2.Zero, 1f,
                                             Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f );
 
                     if ( slot.Count > 1 )
-                        game.SpriteBatch.DrawString( ContentManager.ToolBoxFont, slot.Count.ToString( CultureInfo.InvariantCulture ),
-                                                      slot.Tool.Position - new Vector2( 0, 10 ), Color.White );
+                        game.SpriteBatch.DrawString ( ContentManager.ToolBoxFont, slot.Count.ToString ( CultureInfo.InvariantCulture ),
+                                                      slot.Tool.Position - new Vector2 ( 0, 10 ), Color.White );
                 }
 
             }
 
-            game.SpriteBatch.End();
+            game.SpriteBatch.End ();
         }
 
         internal Slot GetSlot ( MouseState state ) {
             for ( int i = 0; i < 6; i++ ) {
                 Slot slot = Slots[ i ];
 
-                if ( slot.Tool.IsInBounds( state.X, state.Y ) ) {
+                if ( slot == null )
+                    continue;
+
+                if ( slot.Tool.IsInBounds ( state.X, state.Y ) ) {
                     return slot;
                 }
             }
@@ -172,14 +178,14 @@ namespace Flux.Display {
         }
 
         internal Block GetBlock ( Type type, float x, float y ) {
-            if ( type.BaseType != typeof( Block ) ) {
-                throw new ArgumentException( "Specified type is not a block" );
+            if ( type.BaseType != typeof ( Block ) ) {
+                throw new ArgumentException ( "Specified type is not a block" );
             }
 
-            Block block = (Block) Activator.CreateInstance( type, game, new Vector2( x, y ) );
+            Block block = (Block) Activator.CreateInstance ( type, game, new Vector2 ( x, y ) );
 
             if ( block == null ) {
-                throw new NullReferenceException( "Type does not contain a valid block" );
+                throw new NullReferenceException ( "Type does not contain a valid block" );
             }
 
             return block;

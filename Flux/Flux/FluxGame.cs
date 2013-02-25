@@ -14,6 +14,7 @@ using System.Reflection;
 using FarseerPhysics.Dynamics;
 using Flux.Display;
 using System.Diagnostics;
+using FluxEngine.Display.UI;
 
 namespace Flux {
     /// <summary>
@@ -26,7 +27,7 @@ namespace Flux {
         /// </summary>
         public Version Version {
             get {
-                return Assembly.GetAssembly( typeof( FluxGame ) ).GetName().Version;
+                return Assembly.GetAssembly ( typeof ( FluxGame ) ).GetName ().Version;
             }
         }
 
@@ -47,14 +48,14 @@ namespace Flux {
 #endif
 
 
-        public FluxGame () {
-            Graphics = new GraphicsDeviceManager( this );
+        public FluxGame ()
+            : base () {
+
+            Graphics = new GraphicsDeviceManager ( this );
             Content.RootDirectory = "Content";
 
             this.IsFixedTimeStep = true;
-            ConvertUnits.SetDisplayUnitToSimUnitRatio( 64f );
-
-            PhysicsWorld = new World( PhysicsUtils.EarthGravity );
+            ConvertUnits.SetDisplayUnitToSimUnitRatio ( 64f );
 
             Graphics.PreferredBackBufferHeight = 600;
             Graphics.PreferredBackBufferWidth = 1200;
@@ -82,19 +83,18 @@ namespace Flux {
             this.Window.Title = "Flux - v" + Version;
 #endif
 
+            base.Initialize ();
 
-            Camera = new Camera( this );
-            HUD = new HUD( this );
+            HUD.HUDObjects.Add ( new CursorComponent ( this ) );
+            HUD.HUDObjects.Add ( new FPSComponent ( this ) );
+            HUD.HUDObjects.Add ( new CursorLocationComponent ( this ) );
 
-            HUD.HUDObjects.Add( new CursorComponent( this ) );
-            HUD.HUDObjects.Add( new FPSComponent( this ) );
-            HUD.HUDObjects.Add( new CursorLocationComponent( this ) );
+            Components.Add ( HUD );
+            HUD.Initialize ();
 
-            Components.Add( HUD );
+            var button = new Button ( this ) { Bounds = new Rectangle ( HUD.Width - 80 , HUD.Height - 35, 40, 20 ) };
 
-
-
-            base.Initialize();
+            ViewManager.Add ( button );
         }
 
         /// <summary>
@@ -102,39 +102,37 @@ namespace Flux {
         /// all of your content.
         /// </summary>
         protected override void LoadContent () {
-            SpriteBatch = new SpriteBatch( GraphicsDevice );
+            base.LoadContent ();
 
-            Background = new Background( this );
+            Background = new Background ( this );
 
-            Background.ChangeBackground( "BackgroundTextureOne" );
+            Background.ChangeBackground ( "BackgroundTextureOne" );
+            SpriteManager.Add ( Background );
 
-            TextureManager = new Managers.ContentManager( this );
-            SpriteManager = new SpriteManager();
-            SpriteManager.Add( Background );
-
+            TextureManager = new Managers.ContentManager ( this );
 
             /* Top Wall */
-            //SpriteManager.Add( new WallSprite( this, new Vector2( 0, -HUD.Height / 2f ), HUD.Width, 30 ) );
+            SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 0, -HUD.Height / 2f ), HUD.Width, 30 ) );
 
             /* Left Wall */
-            //SpriteManager.Add( new WallSprite( this, new Vector2( -HUD.Width / 2f, 0 ), 30, HUD.Height ) );
+            SpriteManager.Add ( new WallSprite ( this, new Vector2 ( -HUD.Width / 2f, 0 ), 30, HUD.Height ) );
 
             /* Right Wall */
-            //SpriteManager.Add( new WallSprite( this, new Vector2( HUD.Width / 2f - 15, 0 ), 30, HUD.Height ) );
+            SpriteManager.Add ( new WallSprite ( this, new Vector2 ( HUD.Width / 2f - 15, 0 ), 30, HUD.Height ) );
 
             /* Bottom Wall */
-            SpriteManager.Add( new WallSprite( this, new Vector2( 0, HUD.Height / 2f - 15 ), HUD.Width, 30 ) );
+            SpriteManager.Add ( new WallSprite ( this, new Vector2 ( 0, HUD.Height / 2f - 15 ), HUD.Width, 30 ) );
 
 
-            ToolBox = new Display.ToolBox( this );
-            HUD.HUDObjects.Add( ToolBox );
-            Player = new Player( this );
+            ToolBox = new Display.ToolBox ( this );
+            HUD.HUDObjects.Add ( ToolBox );
+            Player = new Player ( this );
 
-            HUD.Initialize();
 
-            Prefabs.CreatePrefabs( this );
 
-            SetupDebug();
+            Prefabs.CreatePrefabs ( this );
+
+            SetupDebug ();
         }
 
         /// <summary>
@@ -152,22 +150,22 @@ namespace Flux {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         [DebuggerStepThrough]
         protected override void Update ( GameTime gameTime ) {
-            if ( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.F12 ) )
-                this.Exit();
+            if ( GamePad.GetState ( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState ().IsKeyDown ( Keys.F12 ) )
+                this.Exit ();
 
-            PhysicsWorld.Step( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
-            Camera.Update( gameTime );
-            SpriteManager.Update( gameTime );
+            PhysicsWorld.Step ( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
+
+
 
 #if DEBUG
-            if ( Keyboard.GetState().IsKeyDown( Keys.H ) ) {
+            if ( Keyboard.GetState ().IsKeyDown ( Keys.H ) ) {
                 if ( DebugForm == null )
-                    DebugForm = new Display.DebugForm( this );
-                DebugForm.Show();
+                    DebugForm = new Display.DebugForm ( this );
+                DebugForm.Show ();
             }
 #endif
 
-            base.Update( gameTime );
+            base.Update ( gameTime );
         }
 
 
@@ -176,41 +174,41 @@ namespace Flux {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw ( GameTime gameTime ) {
-            GraphicsDevice.Clear( Color.Black );
+            GraphicsDevice.Clear ( Color.Black );
 
-            SpriteBatch.Begin( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.View );
+            SpriteBatch.Begin ( SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, Camera.View );
 
-            SpriteManager.Draw( gameTime );
+            SpriteManager.Draw ( gameTime );
 
-            SpriteBatch.End();
+            SpriteBatch.End ();
 
-            DrawDebugData();
+            DrawDebugData ();
 
-            base.Draw( gameTime );
+            base.Draw ( gameTime );
         }
 
         #region DEBUG
 
         private void SetupDebug () {
             // create and configure the debug view
-            _debugView = new DebugViewXNA( this, PhysicsWorld );
+            _debugView = new DebugViewXNA ( this, PhysicsWorld );
 
-            _debugView.AppendFlags( DebugViewFlags.PerformanceGraph );
-            _debugView.AppendFlags( DebugViewFlags.CenterOfMass );
-            _debugView.AppendFlags( DebugViewFlags.Shape );
-            _debugView.AppendFlags( DebugViewFlags.DebugPanel );
+            _debugView.AppendFlags ( DebugViewFlags.PerformanceGraph );
+            _debugView.AppendFlags ( DebugViewFlags.CenterOfMass );
+            _debugView.AppendFlags ( DebugViewFlags.Shape );
+            _debugView.AppendFlags ( DebugViewFlags.DebugPanel );
             //_debugView.AppendFlags(DebugViewFlags.AABB);
 
             _debugView.DefaultShapeColor = Color.White;
             _debugView.SleepingShapeColor = Color.LightGray;
-            _debugView.LoadContent( GraphicsDevice, Content );
+            _debugView.LoadContent ( GraphicsDevice, Content );
         }
 
         private void DrawDebugData () {
-            Matrix proj = Matrix.CreateOrthographicOffCenter( 0f, HUD.Width, HUD.Height, 0f, 0f, 1f );
-            Matrix view2 = Matrix.CreateScale( 64 );
+            Matrix proj = Matrix.CreateOrthographicOffCenter ( 0f, HUD.Width, HUD.Height, 0f, 0f, 1f );
+            Matrix view2 = Matrix.CreateScale ( 64 );
             view2 *= Camera.View;
-            _debugView.RenderDebugData( ref proj, ref view2 );
+            _debugView.RenderDebugData ( ref proj, ref view2 );
         }
 
         #endregion
