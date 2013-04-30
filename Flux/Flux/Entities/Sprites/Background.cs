@@ -32,8 +32,8 @@ namespace Flux.Entities.Sprites {
 
         }
 
-        public void ChangeBackground ( string contentName, string theme = "Wood" ) {
-            Texture = Game.Content.Load<Texture2D> ( theme + "/Textures/" + contentName );
+        public void ChangeBackground ( string contentName ) {
+            Texture = Game.Content.Load<Texture2D> ( "Wood/Textures/" + contentName );
         }
     }
 }

@@ -40,10 +40,21 @@ namespace FluxEngine.Managers {
         /// </summary>
         /// <param name="sprite">The sprite.</param>
         /// <param name="animation">if set to <c>true</c> [animation].</param>
-        public void Remove ( Sprite sprite, bool animation = true ) {
+        public void Remove ( Sprite sprite ) {
+            sprite.Destroy( true );
+            Sprites.Remove( sprite );
+        }
+
+        /// <summary>
+        /// Removes the specified sprite.
+        /// </summary>
+        /// <param name="sprite">The sprite.</param>
+        /// <param name="animation">if set to <c>true</c> [animation].</param>
+        public void Remove ( Sprite sprite, bool animation ) {
             sprite.Destroy( animation );
             Sprites.Remove( sprite );
         }
+
 
         /// <summary>
         /// Updates all sprites with a specified game time.

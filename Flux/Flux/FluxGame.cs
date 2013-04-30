@@ -15,6 +15,7 @@ using FarseerPhysics.Dynamics;
 using Flux.Display;
 using System.Diagnostics;
 using FluxEngine.Display.UI;
+using FarseerPhysics.DebugView;
 
 namespace Flux {
     /// <summary>
@@ -27,7 +28,7 @@ namespace Flux {
         /// </summary>
         public Version Version {
             get {
-                return Assembly.GetAssembly ( typeof ( FluxGame ) ).GetName ().Version;
+                return new Version( 1, 0, 0 );
             }
         }
 
@@ -41,11 +42,6 @@ namespace Flux {
 
         public Player Player;
         public ToolBox ToolBox;
-
-
-#if DEBUG
-        public DebugForm DebugForm;
-#endif
 
 
         public FluxGame ()
@@ -156,15 +152,6 @@ namespace Flux {
             PhysicsWorld.Step ( (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f );
 
 
-
-#if DEBUG
-            if ( Keyboard.GetState ().IsKeyDown ( Keys.H ) ) {
-                if ( DebugForm == null )
-                    DebugForm = new Display.DebugForm ( this );
-                DebugForm.Show ();
-            }
-#endif
-
             base.Update ( gameTime );
         }
 
@@ -191,7 +178,7 @@ namespace Flux {
 
         private void SetupDebug () {
             // create and configure the debug view
-            _debugView = new DebugViewXNA ( this, PhysicsWorld );
+            _debugView = new DebugViewXNA ( PhysicsWorld );
 
             _debugView.AppendFlags ( DebugViewFlags.PerformanceGraph );
             _debugView.AppendFlags ( DebugViewFlags.CenterOfMass );

@@ -1,7 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
-using System.Drawing;
 using System.Diagnostics;
+
+#if !XBOX
+using System.Drawing;
+#endif
 
 namespace FluxEngine.Utils {
     public class TextureUtils {
@@ -47,6 +50,7 @@ namespace FluxEngine.Utils {
             return texture;
         }
 
+#if !XBOX
 
         /// <summary>
         /// Returns a bitmap from a texture.
@@ -76,7 +80,7 @@ namespace FluxEngine.Utils {
             return bmp;
 
         }
-
+#endif
 
     }
 }

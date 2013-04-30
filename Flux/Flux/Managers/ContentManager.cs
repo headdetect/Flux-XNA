@@ -33,15 +33,30 @@ namespace Flux.Managers {
 
         #endregion
 
-        public ContentManager ( FluxGame fluxGame, string theme = "Wood" ) {
-            BallTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/BallTexture" );
-            WallTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/WallTexture" );
-            CursorTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/CursorTexture" );
-            ToolBoxTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/ToolBoxTexture" );
-            TriangleTexture = fluxGame.Content.Load<Texture2D>( theme + "/Textures/TriangleTexture" );
-            TriangleTexture_Hover = fluxGame.Content.Load<Texture2D>( theme + "/Textures/TriangleTexture_Hover" );
-            RotationOverlay = fluxGame.Content.Load<Texture2D>( theme + "/Textures/RotationOverlay" );
-            MoveOverlay = fluxGame.Content.Load<Texture2D>( theme + "/Textures/MoveOverlay" );
+        public ContentManager ( FluxGame fluxGame ) {
+            BallTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/BallTexture" );
+            WallTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/WallTexture" );
+            CursorTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/CursorTexture" );
+            ToolBoxTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/ToolBoxTexture" );
+            TriangleTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/TriangleTexture" );
+            TriangleTexture_Hover = fluxGame.Content.Load<Texture2D>( "Wood/Textures/TriangleTexture_Hover" );
+            RotationOverlay = fluxGame.Content.Load<Texture2D>( "Wood/Textures/RotationOverlay" );
+            MoveOverlay = fluxGame.Content.Load<Texture2D>( "Wood/Textures/MoveOverlay" );
+
+
+            FPSFont = fluxGame.Content.Load<SpriteFont>( "Fonts/fpsfont" );
+            ToolBoxFont = fluxGame.Content.Load<SpriteFont>( "Fonts/ToolBoxFont" );
+        }
+
+        public ContentManager ( FluxGame fluxGame, string theme ) {
+            BallTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/BallTexture" );
+            WallTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/WallTexture" );
+            CursorTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/CursorTexture" );
+            ToolBoxTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/ToolBoxTexture" );
+            TriangleTexture = fluxGame.Content.Load<Texture2D>( "Wood/Textures/TriangleTexture" );
+            TriangleTexture_Hover = fluxGame.Content.Load<Texture2D>( "Wood/Textures/TriangleTexture_Hover" );
+            RotationOverlay = fluxGame.Content.Load<Texture2D>( "Wood/Textures/RotationOverlay" );
+            MoveOverlay = fluxGame.Content.Load<Texture2D>( "Wood/Textures/MoveOverlay" );
 
 
             FPSFont = fluxGame.Content.Load<SpriteFont>( "Fonts/fpsfont" );

@@ -22,7 +22,28 @@ namespace FluxEngine.Utils {
         /// <param name="r">The radius size.</param>
         /// <param name="convertUnits">Convert units to physics sim units</param>
         /// <returns>An array of Vector2s</returns>
-        public static Vertices CreatePolygon ( int n, float r, bool convertUnits = true ) {
+        public static Vertices CreatePolygon ( int n, float r ) {
+            if ( n < 2 ) {
+                throw new ArithmeticException( "Number of sides must be greater than 2" );
+            }
+
+            Vector2[] verts = new Vector2[ n ];
+            for ( int i = 0; i < n; i++ ) {
+                    verts[ i ] = new Vector2( r * (float)Math.Cos( 2 * Math.PI * i / n ), r * (float)Math.Sin( 2 * Math.PI * i / n ) );
+                
+            }
+
+            return new Vertices( verts );
+        }
+
+        /// <summary>
+        /// Creates a polygon.
+        /// </summary>
+        /// <param name="n">The number of sides.</param>
+        /// <param name="r">The radius size.</param>
+        /// <param name="convertUnits">Convert units to physics sim units</param>
+        /// <returns>An array of Vector2s</returns>
+        public static Vertices CreatePolygon ( int n, float r, bool convertUnits ) {
             if ( n < 2 ) {
                 throw new ArithmeticException ( "Number of sides must be greater than 2" );
             }

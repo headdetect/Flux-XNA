@@ -46,7 +46,7 @@ namespace Flux.Entities.Sprites {
 
 
             if ( state.IsKeyDown ( Keys.Enter ) ) {
-                this.Body.ResetDynamics ();
+                this.Body.ResetDynamics();
                 this.Position = spawnPos ;
                 this.spinIterations = 0;
                 this.Rotation = 0;

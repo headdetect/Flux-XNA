@@ -33,7 +33,7 @@ namespace FluxEngine.Utils {
                 case ShapeType.Circle:
                     return new Vector2( shape.Radius );
                 case ShapeType.Polygon:
-                    return GetSizeFromVertices( ( (PolygonShape) shape ).Vertices );
+                    return GetSizeFromVertices( ( (PolygonShape)shape ).Vertices );
                 default:
                     return Vector2.Zero;
             }
@@ -48,7 +48,7 @@ namespace FluxEngine.Utils {
             Vertices verts = new Vertices( vertices );
             Vector2 scale = ConvertUnits.ToDisplayUnits( Vector2.One );
             verts.Scale( ref scale );
-            AABB vertsBounds = verts.GetCollisionBox();
+            AABB vertsBounds = verts.GetAABB();
             verts.Translate( -vertsBounds.Center );
             return new Vector2( vertsBounds.UpperBound.X - vertsBounds.LowerBound.X,
                                             vertsBounds.UpperBound.Y - vertsBounds.LowerBound.Y );
@@ -74,7 +74,7 @@ namespace FluxEngine.Utils {
         /// The result of the conversion.
         /// </returns>
         public static Point ToPoint ( this Vector2 vector ) {
-            return new Point( (int) vector.X, (int) vector.Y );
+            return new Point( (int)vector.X, (int)vector.Y );
         }
 
         /// <summary>
